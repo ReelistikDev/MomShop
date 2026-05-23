@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import { BRAND } from "@/lib/brand";
 import { cn } from "@/lib/utils";
 import { useCart } from "@/components/cart/cart-provider";
-import { BagIcon, CloseIcon, MenuIcon } from "@/components/icons";
+import { BagIcon, CloseIcon, HeartIcon, MenuIcon } from "@/components/icons";
 import { Container } from "@/components/ui/container";
 
 const NAV = [
@@ -35,10 +35,12 @@ export function SiteHeader() {
   return (
     <>
       {/* Announcement strip — scrolls away */}
-      <div className="bg-sage-dark text-cream/95">
+      <div className="bg-twilight text-cream/95">
         <Container>
-          <p className="py-2 text-center text-[0.72rem] font-medium tracking-[0.16em] uppercase">
-            Free U.S. shipping over $75 · Handmade to order
+          <p className="flex items-center justify-center gap-2.5 py-2 text-center text-[0.72rem] font-medium uppercase tracking-[0.16em]">
+            <span>Handmade with love</span>
+            <HeartIcon className="h-3 w-3 text-heart" />
+            <span className="hidden sm:inline">Free U.S. shipping over $50</span>
           </p>
         </Container>
       </div>

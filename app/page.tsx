@@ -10,7 +10,9 @@ import {
   ArrowRightIcon,
   FeatherIcon,
   GiftIcon,
+  HeartIcon,
   LeafIcon,
+  SprigIcon,
 } from "@/components/icons";
 import { getBestSellers, getMaterials } from "@/lib/data";
 import { BRAND } from "@/lib/brand";
@@ -23,8 +25,8 @@ const VALUES = [
   },
   {
     Icon: LeafIcon,
-    title: "Made by hand",
-    body: "Designed, cut, and finished in small batches — CNC-precise where it counts, sanded and sealed by hand.",
+    title: "Painted by hand",
+    body: "Cut from wood, then hand-painted, sealed, and assembled in small batches — so no two pairs are exactly alike.",
   },
   {
     Icon: GiftIcon,
@@ -45,14 +47,14 @@ export default async function HomePage() {
       <section className="relative overflow-hidden">
         <Container className="grid items-center gap-10 py-14 lg:grid-cols-2 lg:gap-16 lg:py-24">
           <div className="animate-rise max-w-xl">
-            <span className="eyebrow">Handmade wood &amp; leather earrings</span>
+            <span className="eyebrow">Hand-painted wood &amp; leather earrings</span>
             <h1 className="text-display mt-4 text-balance">
-              Light earrings,{" "}
+              Little night skies,{" "}
               <span className="italic text-sage-dark">made by hand.</span>
             </h1>
             <p className="mt-6 max-w-md text-lg leading-relaxed text-stone">
-              CNC-cut wood and soft leather earrings — light enough for everyday
-              and made in small batches with care.
+              Hand-painted wood and leather earrings — tiny landscapes, light
+              enough for everyday, made in small batches with love.
             </p>
             <div className="mt-8 flex flex-wrap items-center gap-3">
               <Button href="/shop" variant="primary" size="lg">
@@ -73,19 +75,20 @@ export default async function HomePage() {
           </div>
 
           <div className="relative">
-            <div className="relative aspect-[4/5] w-full overflow-hidden rounded-card shadow-card">
+            <div className="relative aspect-[4/3] w-full overflow-hidden rounded-card shadow-card lg:aspect-[5/4]">
               <Image
-                src="/images/hero.jpg"
-                alt="A model wearing handmade statement earrings"
+                src="/images/display.jpg"
+                alt="Hand-painted night-sky wood earrings displayed on Handmade with love cards"
                 fill
                 priority
                 sizes="(max-width: 1024px) 100vw, 50vw"
                 className="object-cover"
               />
             </div>
-            <div className="absolute -bottom-4 left-4 hidden rounded-full bg-cream/90 px-5 py-3 shadow-soft backdrop-blur-sm sm:left-6 sm:block">
-              <p className="font-serif text-[0.95rem] text-ink">
-                “Find your everyday pair.”
+            <div className="absolute -bottom-4 left-4 hidden rounded-full bg-cream/90 px-5 py-2.5 shadow-soft backdrop-blur-sm sm:left-6 sm:block">
+              <p className="flex items-center gap-1.5 font-script text-xl leading-none text-ink">
+                Find your everyday pair
+                <HeartIcon className="h-3.5 w-3.5 text-heart" />
               </p>
             </div>
           </div>
@@ -179,6 +182,7 @@ export default async function HomePage() {
       {/* ------------------------- Handmade with care ------------------------- */}
       <section className="py-16 lg:py-24">
         <Container>
+          <SprigIcon className="mx-auto mb-4 h-7 w-7 text-sage" />
           <SectionHeading
             eyebrow="Handmade with care"
             title="The difference is in the making"
@@ -221,12 +225,11 @@ export default async function HomePage() {
                 From the studio
               </span>
               <h2 className="mt-4 font-serif text-[2.2rem] leading-tight text-cream lg:text-[2.8rem]">
-                Cut to order, finished by hand.
+                Cut, painted, and finished by hand.
               </h2>
               <p className="mt-5 max-w-md leading-relaxed text-cream/90">
-                Each shape is cut on the CNC for clean, repeatable lines, then
-                sanded, sealed, and assembled by hand. No big batches — just a
-                few pairs at a time.
+                Each shape is cut from wood, then hand-painted, sealed, and
+                assembled — a few pairs at a time. No two are exactly alike.
               </p>
               <div className="mt-8">
                 <Button

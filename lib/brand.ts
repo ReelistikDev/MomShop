@@ -6,7 +6,7 @@ export const BRAND = {
   name: "Willow & Wren",
   tagline: "Handmade with care",
   description:
-    "Handmade wood and leather earrings — light enough for everyday, made in small batches.",
+    "Hand-painted wood and leather earrings — little night skies, forests, and everyday pieces, made in small batches with love.",
   email: "hello@willowandwren.com",
   phone: "(555) 014-2278",
   location: "Handmade in small batches · Asheville, NC",

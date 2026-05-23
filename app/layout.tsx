@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Fraunces, Hanken_Grotesk } from "next/font/google";
+import { Fraunces, Hanken_Grotesk, Caveat } from "next/font/google";
 import "./globals.css";
 import { CartProvider } from "@/components/cart/cart-provider";
 import { CartDrawer } from "@/components/cart/cart-drawer";
@@ -17,6 +17,12 @@ const fraunces = Fraunces({
 const hanken = Hanken_Grotesk({
   subsets: ["latin"],
   variable: "--font-hanken",
+  display: "swap",
+});
+
+const caveat = Caveat({
+  subsets: ["latin"],
+  variable: "--font-caveat",
   display: "swap",
 });
 
@@ -44,7 +50,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${fraunces.variable} ${hanken.variable} h-full antialiased`}
+      className={`${fraunces.variable} ${hanken.variable} ${caveat.variable} h-full antialiased`}
     >
       <body className="flex min-h-full flex-col bg-cream text-ink">
         <CartProvider>

@@ -1,21 +1,22 @@
-import type { Material, MaterialSlug, Product } from "./types";
+import type { Material, Product } from "./types";
 
 /* ---------------------------------------------------------------------------
-   Seed catalog — handmade earrings (CNC-cut wood, leather, and mixed).
+   Seed catalog — handmade earrings. The signature pieces are hand-painted
+   wood rounds (night skies, forests, mountains, bears), alongside leather and
+   mixed-material pairs.
 
-   Images in /public/images are PLACEHOLDERS sourced from Unsplash — swap them
-   with the brand's own product photography. The accessor functions below are
-   async and shaped to be backed by Supabase later (see supabase/migrations);
-   today they resolve from this seed so the site runs with no database.
+   Images in /public/images are PLACEHOLDERS (Unsplash) except display.jpg,
+   which is the real product photo — swap the rest with the brand's own.
+   Accessors are async and shaped to be backed by Supabase later.
 --------------------------------------------------------------------------- */
 
 export const materials: Material[] = [
   {
     slug: "wood",
     name: "Wood",
-    tagline: "CNC-cut, light as can be",
+    tagline: "Hand-painted little scenes",
     description:
-      "Light-toned wood, cut and sanded by hand, then sealed for everyday wear. Warm, natural, and barely-there on the ear.",
+      "Light wood rounds, hand-painted with night skies, forests, and mountains, then sealed to last. Each one is painted by hand, so no two are quite the same.",
     image: "/images/material-wood.jpg",
   },
   {
@@ -36,82 +37,82 @@ export const materials: Material[] = [
   },
 ];
 
-const FINISH_LIGHT = { name: "Finish", options: ["Natural Maple", "Light Walnut"] };
 const HARDWARE = { name: "Hardware", options: ["Surgical Steel", "Brass"] };
 const LEATHER_TONE = { name: "Tone", options: ["Tan", "Cognac", "Black"] };
 
 export const products: Product[] = [
   {
-    id: "birch-studs",
-    slug: "birch-studs",
-    name: "Birch Studs",
+    id: "moonlit-pines",
+    slug: "moonlit-pines",
+    name: "Moonlit Pines",
     material: "wood",
-    style: "Studs",
-    price: 24,
-    images: ["/images/product-1.jpg", "/images/hero.jpg", "/images/material-wood.jpg"],
+    style: "Round",
+    price: 34,
+    images: ["/images/product-1.jpg", "/images/material-wood.jpg", "/images/banner-lifestyle.jpg"],
     badge: "bestseller",
     bestSeller: true,
-    shortDescription: "Lightweight CNC-cut wood studs for everyday wear.",
+    shortDescription: "A crescent moon over a hand-painted pine forest.",
     description:
-      "A small, smooth wood stud cut on the CNC and sanded by hand. Light enough to forget you're wearing them — the pair you reach for on a normal Tuesday. Warm, simple, and easy to gift.",
-    materials: ["Light maple", "Hand-sealed finish", "Surgical steel posts"],
-    details: ["Featherlight — under 1g", "10mm", "Nickel-free posts"],
-    care: ["Keep dry; wipe with a soft cloth", "Avoid soaking or perfume"],
-    variants: [FINISH_LIGHT],
+      "A crescent moon hangs over a hand-painted pine forest on a light wood round. The deep twilight sky is painted by hand and sealed to last — a little piece of a quiet night you can wear anywhere.",
+    materials: ["Birch wood", "Hand-painted & sealed", "Surgical steel hooks"],
+    details: ["Lightweight on the ear", "~35mm round", "Each one slightly unique"],
+    care: ["Keep dry; avoid soaking & perfume", "Wipe gently with a soft cloth"],
+    variants: [HARDWARE],
   },
   {
-    id: "aspen-hoops",
-    slug: "aspen-hoops",
-    name: "Aspen Hoops",
+    id: "wandering-bear",
+    slug: "wandering-bear",
+    name: "Wandering Bear",
     material: "wood",
-    style: "Hoops",
+    style: "Round",
+    price: 36,
+    images: ["/images/product-2.jpg", "/images/material-wood.jpg", "/images/banner-lifestyle.jpg"],
+    badge: "bestseller",
+    bestSeller: true,
+    shortDescription: "A bear ambling through a painted, starry treeline.",
+    description:
+      "A bear wanders through a hand-painted treeline under a scatter of stars. Painted on light wood and sealed by hand — calm, woodsy, and just a little wild.",
+    materials: ["Birch wood", "Hand-painted & sealed", "Surgical steel hooks"],
+    details: ["Lightweight on the ear", "~35mm round", "Each one slightly unique"],
+    care: ["Keep dry; avoid soaking & perfume", "Wipe gently with a soft cloth"],
+    variants: [HARDWARE],
+  },
+  {
+    id: "starry-forest",
+    slug: "starry-forest",
+    name: "Starry Forest",
+    material: "wood",
+    style: "Round",
     price: 32,
-    images: ["/images/product-2.jpg", "/images/material-wood.jpg", "/images/hero.jpg"],
-    badge: "bestseller",
-    bestSeller: true,
-    shortDescription: "Warm wooden hoops with an easy, everyday swing.",
-    description:
-      "An open wooden hoop, cut clean and sanded smooth. It catches the light with a warm, natural grain and stays light on the ear all day. Quiet enough for work, pretty enough for after.",
-    materials: ["Light walnut", "Hand-sealed finish", "Surgical steel hooks"],
-    details: ["Under 2g each", "35mm drop", "Smooth, snag-free edges"],
-    care: ["Keep dry", "Store flat, out of direct sun"],
-    variants: [FINISH_LIGHT, HARDWARE],
-  },
-  {
-    id: "meadow-drops",
-    slug: "meadow-drops",
-    name: "Meadow Drops",
-    material: "wood",
-    style: "Drops",
-    price: 30,
-    images: ["/images/product-3.jpg", "/images/material-wood.jpg", "/images/banner-lifestyle.jpg"],
+    images: ["/images/product-3.jpg", "/images/material-wood.jpg", "/images/hero.jpg"],
     badge: "handmade",
-    shortDescription: "Laser-cut botanical drops in light wood.",
+    bestSeller: true,
+    shortDescription: "A scatter of stars above hand-painted pines.",
     description:
-      "A slender leaf shape, laser-cut from light wood and finished by hand. It moves softly when you do and keeps an outfit feeling calm and considered. A little nod to the outdoors you can wear anywhere.",
-    materials: ["Light maple", "Laser-cut detail", "Surgical steel hooks"],
-    details: ["Lightweight on the ear", "40mm drop", "Open hook closure"],
-    care: ["Keep dry", "Wipe gently with a soft cloth"],
-    variants: [FINISH_LIGHT],
+      "Stars scattered above a hand-painted pine forest on a light wood round. Quietly detailed and light on the ear — the pair that makes people lean in for a closer look.",
+    materials: ["Birch wood", "Hand-painted & sealed", "Surgical steel hooks"],
+    details: ["Lightweight on the ear", "~32mm round", "Each one slightly unique"],
+    care: ["Keep dry; avoid soaking & perfume", "Wipe gently with a soft cloth"],
+    variants: [HARDWARE],
   },
   {
-    id: "quarry-geometrics",
-    slug: "quarry-geometrics",
-    name: "Quarry Geometrics",
+    id: "mountain-range",
+    slug: "mountain-range",
+    name: "Mountain Range",
     material: "wood",
-    style: "Statement",
+    style: "Round",
     price: 38,
     images: ["/images/product-4.jpg", "/images/material-wood.jpg"],
-    badge: "new",
+    badge: "custom",
     isNew: true,
     personalizable: true,
-    shortDescription: "Bold geometric wood — engrave it if you'd like.",
+    shortDescription: "Hand-painted peaks — engrave the back if you'd like.",
     description:
-      "A clean geometric shape cut on the CNC for a bit more presence. Surprisingly light for its size, and a lovely blank canvas — add a small initial or date and we'll engrave it for you, gift-ready.",
-    materials: ["Light walnut", "CNC-cut", "Surgical steel posts"],
-    details: ["Lightweight despite the size", "45mm", "Optional hand engraving"],
-    care: ["Keep dry", "Avoid soaking and perfume"],
-    variants: [FINISH_LIGHT, HARDWARE],
+      "Hand-painted peaks under an open sky on a light wood round. Add a small initial or date and we'll engrave it on the back — a wearable little landscape, made personal and gift-ready.",
+    materials: ["Birch wood", "Hand-painted & sealed", "Optional back engraving"],
+    details: ["Lightweight despite the size", "~38mm round", "Up to 12 characters"],
+    care: ["Keep dry; avoid soaking & perfume", "Wipe gently with a soft cloth"],
+    variants: [HARDWARE],
   },
   {
     id: "saddle-teardrops",
@@ -175,19 +176,17 @@ export const products: Product[] = [
     price: 36,
     images: ["/images/product-8.jpg", "/images/material-mixed.jpg", "/images/banner-lifestyle.jpg"],
     badge: "handmade",
-    shortDescription: "Light wood paired with leather and a hint of brass.",
+    shortDescription: "Hand-painted wood paired with leather and brass.",
     description:
-      "Wood, leather, and a small brass accent brought together in one easy drop. The materials play off each other — warm grain, soft leather, a little shine — while staying light and wearable.",
-    materials: ["Light maple", "Genuine leather", "Brass accent", "Surgical steel hooks"],
+      "A hand-painted wood piece brought together with soft leather and a small brass accent. The materials play off each other — warm grain, painted color, a little shine — while staying light and wearable.",
+    materials: ["Birch wood", "Genuine leather", "Brass accent", "Surgical steel hooks"],
     details: ["Lightweight", "42mm drop", "Mixed-material detail"],
     care: ["Keep dry", "Wipe gently; avoid soaking"],
-    variants: [FINISH_LIGHT, LEATHER_TONE],
+    variants: [HARDWARE, LEATHER_TONE],
   },
 ];
 
 /* ----------------------------- Accessors ---------------------------------- */
-/* async + Promise-returning so they can be swapped for Supabase queries with
-   no change at the call sites. */
 
 export async function getMaterials(): Promise<Material[]> {
   return materials;

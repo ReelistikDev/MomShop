@@ -16,10 +16,18 @@
   --color-oak: #c8b49a;
   --color-oak-dark: #a98e6b;
 
-  /* Muted sage — the single signature accent */
+  /* Muted sage — botanical accent */
   --color-sage: #8b9a7b;
   --color-sage-light: #b4bfa3;
   --color-sage-dark: #687457;
+
+  /* Twilight night-sky blue — echoes the hand-painted scenes */
+  --color-twilight: #3b4a63;
+  --color-twilight-soft: #5c7090;
+  --color-sky: #a3b8cf;
+
+  /* "Handmade with love" — warm clay heart */
+  --color-heart: #b35a44;
 
   /* Ink + muted text */
   --color-ink: #34302a; /* warm charcoal, primary text */
@@ -32,6 +40,7 @@
 
   --font-sans: var(--font-hanken), ui-sans-serif, system-ui, sans-serif;
   --font-serif: var(--font-fraunces), ui-serif, Georgia, "Times New Roman", serif;
+  --font-script: var(--font-caveat), "Segoe Script", cursive;
 
   /* Very soft shadows only */
   --shadow-soft: 0 1px 2px rgba(52, 48, 42, 0.04), 0 4px 14px rgba(52, 48, 42, 0.05);

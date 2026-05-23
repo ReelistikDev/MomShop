@@ -3,8 +3,10 @@ import { BRAND } from "@/lib/brand";
 import { Container } from "@/components/ui/container";
 import {
   FacebookIcon,
+  HeartIcon,
   InstagramIcon,
   PinterestIcon,
+  SprigIcon,
 } from "@/components/icons";
 
 const COLUMNS = [
@@ -97,8 +99,11 @@ export function SiteFooter() {
           <p>
             © {year} {BRAND.name}. {BRAND.location}.
           </p>
-          <p className="flex items-center gap-1.5">
-            Made with care <span className="text-sage">·</span> Handmade to order
+          <p className="flex items-center gap-2 font-script text-lg text-stone">
+            <SprigIcon className="h-4 w-4 text-sage" />
+            Handmade with love
+            <HeartIcon className="h-3.5 w-3.5 text-heart" />
+            <SprigIcon className="h-4 w-4 -scale-x-100 text-sage" />
           </p>
         </Container>
       </div>
