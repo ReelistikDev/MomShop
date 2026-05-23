@@ -1,0 +1,144 @@
+@import "tailwindcss";
+
+/* ---------------------------------------------------------------------------
+   MomShop design system — warm, natural, boutique-artisan.
+   Tailwind v4 tokens: each --color-* / --font-* / --shadow-* below becomes a
+   utility (bg-cream, text-ink, font-serif, shadow-soft, rounded-card, ...).
+--------------------------------------------------------------------------- */
+@theme {
+  /* Warm neutrals — never stark white, never pure black */
+  --color-cream: #f8f6f2; /* page background */
+  --color-shell: #fdfbf7; /* raised surfaces / cards */
+  --color-linen: #efeae0; /* alternating section background */
+  --color-sand: #e7decd; /* deeper neutral fill */
+
+  /* White-oak wood accents */
+  --color-oak: #c8b49a;
+  --color-oak-dark: #a98e6b;
+
+  /* Muted sage — the single signature accent */
+  --color-sage: #8b9a7b;
+  --color-sage-light: #b4bfa3;
+  --color-sage-dark: #687457;
+
+  /* Ink + muted text */
+  --color-ink: #34302a; /* warm charcoal, primary text */
+  --color-stone: #6f685c; /* secondary text */
+  --color-mist: #978f81; /* tertiary / captions */
+
+  /* Hairline borders — low-contrast, warm. No harsh black. */
+  --color-line: #e6e0d5;
+  --color-line-strong: #d8d0c2;
+
+  --font-sans: var(--font-hanken), ui-sans-serif, system-ui, sans-serif;
+  --font-serif: var(--font-fraunces), ui-serif, Georgia, "Times New Roman", serif;
+
+  /* Very soft shadows only */
+  --shadow-soft: 0 1px 2px rgba(52, 48, 42, 0.04), 0 4px 14px rgba(52, 48, 42, 0.05);
+  --shadow-card: 0 1px 2px rgba(52, 48, 42, 0.04), 0 12px 32px rgba(52, 48, 42, 0.07);
+  --shadow-lift: 0 8px 20px rgba(52, 48, 42, 0.07), 0 26px 60px rgba(52, 48, 42, 0.1);
+
+  /* Subtle radii */
+  --radius-card: 1.125rem;
+
+  /* Editorial type scale (clamp = fluid, mobile-first) */
+  --text-display: clamp(2.6rem, 5.6vw, 4.5rem);
+  --text-h1: clamp(2.1rem, 4vw, 3.25rem);
+  --text-h2: clamp(1.7rem, 3vw, 2.5rem);
+  --text-h3: clamp(1.35rem, 2vw, 1.75rem);
+}
+
+@layer base {
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: var(--color-cream);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    line-height: 1.65;
+    letter-spacing: 0.005em;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-serif);
+    font-weight: 380;
+    line-height: 1.08;
+    letter-spacing: -0.012em;
+    color: var(--color-ink);
+    font-optical-sizing: auto;
+  }
+
+  ::selection {
+    background: color-mix(in srgb, var(--color-sage) 28%, transparent);
+    color: var(--color-ink);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-sage);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+
+  img {
+    color: transparent; /* hides alt text flash before load */
+  }
+}
+
+/* Fluid heading helpers */
+@utility text-display {
+  font-size: var(--text-display);
+}
+@utility text-h1 {
+  font-size: var(--text-h1);
+}
+@utility text-h2 {
+  font-size: var(--text-h2);
+}
+@utility text-h3 {
+  font-size: var(--text-h3);
+}
+
+/* Small uppercase eyebrow label used above section titles */
+@utility eyebrow {
+  font-family: var(--font-sans);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--color-sage-dark);
+}
+
+/* Gentle entrance used sparingly (respects reduced-motion) */
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@utility animate-rise {
+  animation: rise 0.7s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
