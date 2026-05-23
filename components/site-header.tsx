@@ -11,8 +11,7 @@ import { Container } from "@/components/ui/container";
 
 const NAV = [
   { href: "/shop", label: "Shop" },
-  { href: "/personalized", label: "Personalized" },
-  { href: "/collections", label: "Collections" },
+  { href: "/custom", label: "Custom" },
   { href: "/about", label: "About" },
   { href: "/contact", label: "Contact" },
 ];

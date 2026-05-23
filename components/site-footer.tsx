@@ -11,19 +11,17 @@ const COLUMNS = [
   {
     title: "Shop",
     links: [
-      { label: "All jewelry", href: "/shop" },
-      { label: "Earrings", href: "/collections/earrings" },
-      { label: "Necklaces", href: "/collections/necklaces" },
-      { label: "Rings", href: "/collections/rings" },
-      { label: "Bracelets", href: "/collections/bracelets" },
+      { label: "All earrings", href: "/shop" },
+      { label: "Wood", href: "/shop?material=wood" },
+      { label: "Leather", href: "/shop?material=leather" },
+      { label: "Mixed", href: "/shop?material=mixed" },
     ],
   },
   {
     title: "The studio",
     links: [
       { label: "Our story", href: "/about" },
-      { label: "Personalized", href: "/personalized" },
-      { label: "Collections", href: "/collections" },
+      { label: "Custom orders", href: "/custom" },
       { label: "Contact", href: "/contact" },
     ],
   },
@@ -31,8 +29,8 @@ const COLUMNS = [
     title: "Help",
     links: [
       { label: "Shipping & returns", href: "/contact" },
-      { label: "Jewelry care", href: "/about" },
-      { label: "Gift notes", href: "/personalized" },
+      { label: "Earring care", href: "/about" },
+      { label: "Custom requests", href: "/custom" },
       { label: `Email us`, href: `mailto:${BRAND.email}` },
     ],
   },

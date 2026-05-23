@@ -73,19 +73,19 @@ export function AddToCart({ product }: { product: Product }) {
               Personalize
             </span>
             <span className="text-[0.8rem] text-mist">
-              {engraving.length}/8
+              {engraving.length}/12
             </span>
           </div>
           <input
             type="text"
-            maxLength={8}
+            maxLength={12}
             value={engraving}
             onChange={(e) => setEngraving(e.target.value)}
             placeholder="Initial, date, or short word"
             className="h-12 w-full rounded-xl border border-line-strong bg-cream px-4 text-ink placeholder:text-mist focus:border-oak focus:outline-none"
           />
           <p className="mt-1.5 text-[0.82rem] text-mist">
-            Hand-stamped by us — leave blank for no engraving.
+            Hand-engraved on the wood — leave blank for none.
           </p>
         </div>
       )}

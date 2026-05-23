@@ -1,8 +1,8 @@
 # MomShop — boutique handmade jewelry storefront
 
-A warm, natural, boutique-artisan storefront for handmade jewelry and
-personalized gifts. Built to feel **quietly premium** — calm, airy, and
-handcrafted, never flashy or corporate.
+A warm, natural, boutique-artisan storefront for **handmade wood & leather
+earrings** (CNC-cut, with made-to-order custom pieces). Built to feel
+**quietly premium** — calm, airy, and handcrafted, never flashy or corporate.
 
 Display brand is a **placeholder** (`Willow & Wren`). Change it in one place —
 `lib/brand.ts` — to rebrand the whole site.
@@ -38,8 +38,8 @@ The site runs **fully on local seed data — no database required.**
 
 ## Pages
 
-`/` home · `/shop` (filterable) · `/products/[slug]` · `/collections` +
-`/collections/[slug]` · `/personalized` · `/about` · `/contact`. Cart is
+`/` home · `/shop` (filter by material: Wood / Leather / Mixed) ·
+`/products/[slug]` · `/custom` (made-to-order) · `/about` · `/contact`. Cart is
 client-side (localStorage) with a slide-out drawer.
 
 ## Imagery
@@ -64,7 +64,7 @@ The data layer (`lib/data.ts`) is async and shaped to be backed by Supabase.
 With env set, the newsletter and contact forms write to Supabase
 (`app/api/newsletter`, `app/api/contact`); without it they no-op gracefully.
 To read the catalog from Supabase, point the accessors in `lib/data.ts` at the
-`products` / `collections` tables (RLS already allows public reads).
+`products` / `materials` tables (RLS already allows public reads).
 
 ## Project layout
 

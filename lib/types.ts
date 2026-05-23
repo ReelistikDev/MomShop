@@ -1,7 +1,10 @@
 export type Badge = "handmade" | "custom" | "bestseller" | "new";
 
+/** Material grouping used for the shop filter + home tiles. */
+export type MaterialSlug = "wood" | "leather" | "mixed";
+
 export interface ProductVariant {
-  /** e.g. "Metal", "Length", "Ring size" */
+  /** e.g. "Finish", "Hardware" */
   name: string;
   options: string[];
 }
@@ -10,8 +13,9 @@ export interface Product {
   id: string;
   slug: string;
   name: string;
-  /** Collection slug this product belongs to. */
-  collection: string;
+  material: MaterialSlug;
+  /** Silhouette, shown as a small label: Studs / Hoops / Drops / Statement. */
+  style: string;
   price: number;
   images: string[];
   badge?: Badge;
@@ -26,8 +30,8 @@ export interface Product {
   isNew?: boolean;
 }
 
-export interface Collection {
-  slug: string;
+export interface Material {
+  slug: MaterialSlug;
   name: string;
   tagline: string;
   description: string;

@@ -1,12 +1,12 @@
--- MomShop — initial commerce schema
--- Catalog (collections, products) is publicly readable; newsletter + contact
+-- MomShop — initial commerce schema (handmade earrings)
+-- Catalog (materials, products) is publicly readable; newsletter + contact
 -- accept anonymous inserts but are not publicly readable.
 
 create extension if not exists "pgcrypto";
 
--- ----------------------------------------------------------------- collections
-create table if not exists public.collections (
-  slug        text primary key,
+-- ------------------------------------------------------------------ materials
+create table if not exists public.materials (
+  slug        text primary key,           -- 'wood' | 'leather' | 'mixed'
   name        text not null,
   tagline     text not null,
   description text not null,
@@ -20,7 +20,8 @@ create table if not exists public.products (
   id               text primary key,
   slug             text unique not null,
   name             text not null,
-  collection_slug  text not null references public.collections(slug) on delete restrict,
+  material         text not null references public.materials(slug) on delete restrict,
+  style            text not null,         -- 'Studs' | 'Hoops' | 'Drops' | 'Statement'
   price            numeric(10,2) not null check (price >= 0),
   images           text[] not null default '{}',
   badge            text check (badge in ('handmade','custom','bestseller','new')),
@@ -37,7 +38,7 @@ create table if not exists public.products (
   sort_order       int     not null default 0,
   created_at       timestamptz not null default now()
 );
-create index if not exists products_collection_idx on public.products (collection_slug);
+create index if not exists products_material_idx on public.products (material);
 create index if not exists products_active_idx on public.products (active);
 
 -- -------------------------------------------------------- newsletter + contact
@@ -57,14 +58,14 @@ create table if not exists public.contact_messages (
 );
 
 -- --------------------------------------------------------------------- RLS
-alter table public.collections             enable row level security;
+alter table public.materials               enable row level security;
 alter table public.products                enable row level security;
 alter table public.newsletter_subscribers  enable row level security;
 alter table public.contact_messages        enable row level security;
 
 -- Catalog: world-readable.
-create policy "Public read collections"
-  on public.collections for select using (true);
+create policy "Public read materials"
+  on public.materials for select using (true);
 
 create policy "Public read active products"
   on public.products for select using (active);

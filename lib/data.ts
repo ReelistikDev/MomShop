@@ -1,7 +1,7 @@
-import type { Collection, Product } from "./types";
+import type { Material, MaterialSlug, Product } from "./types";
 
 /* ---------------------------------------------------------------------------
-   Seed catalog.
+   Seed catalog — handmade earrings (CNC-cut wood, leather, and mixed).
 
    Images in /public/images are PLACEHOLDERS sourced from Unsplash — swap them
    with the brand's own product photography. The accessor functions below are
@@ -9,180 +9,179 @@ import type { Collection, Product } from "./types";
    today they resolve from this seed so the site runs with no database.
 --------------------------------------------------------------------------- */
 
-export const collections: Collection[] = [
+export const materials: Material[] = [
   {
-    slug: "earrings",
-    name: "Earrings",
-    tagline: "Light enough to forget you're wearing them",
+    slug: "wood",
+    name: "Wood",
+    tagline: "CNC-cut, light as can be",
     description:
-      "Hand-shaped hoops, studs, and drops in gold fill and sterling silver. Designed to sit comfortably from morning to evening.",
-    image: "/images/collection-earrings.jpg",
+      "Light-toned wood, cut and sanded by hand, then sealed for everyday wear. Warm, natural, and barely-there on the ear.",
+    image: "/images/material-wood.jpg",
   },
   {
-    slug: "necklaces",
-    name: "Necklaces",
-    tagline: "Layer them, or wear just one",
+    slug: "leather",
+    name: "Leather",
+    tagline: "Soft, supple, full of movement",
     description:
-      "Delicate chains and quiet pendants made to live close to the skin. Easy to mix, easy to keep on.",
-    image: "/images/collection-necklaces.jpg",
+      "Genuine leather cut into clean shapes that move with you. Soft to the touch and easy to wear from morning to night.",
+    image: "/images/material-leather.jpg",
   },
   {
-    slug: "rings",
-    name: "Rings",
-    tagline: "Simple bands for every day",
+    slug: "mixed",
+    name: "Mixed",
+    tagline: "Wood, leather & a little brass",
     description:
-      "Slim, stackable rings finished by hand. Smooth edges, no snagging, made to be worn together.",
-    image: "/images/collection-rings.jpg",
-  },
-  {
-    slug: "bracelets",
-    name: "Bracelets",
-    tagline: "A soft weight on the wrist",
-    description:
-      "Beaded and chain bracelets strung in small batches. Understated pieces that finish a look without asking for attention.",
-    image: "/images/collection-bracelets.jpg",
+      "Where materials meet — wood paired with leather or a touch of brass for pieces with a bit more to say.",
+    image: "/images/material-mixed.jpg",
   },
 ];
 
-const GOLD_SILVER = { name: "Metal", options: ["14k Gold Fill", "Sterling Silver"] };
-const LENGTHS = { name: "Length", options: ['16"', '18"', '20"'] };
-const RING_SIZES = { name: "Ring size", options: ["5", "6", "7", "8", "9"] };
+const FINISH_LIGHT = { name: "Finish", options: ["Natural Maple", "Light Walnut"] };
+const HARDWARE = { name: "Hardware", options: ["Surgical Steel", "Brass"] };
+const LEATHER_TONE = { name: "Tone", options: ["Tan", "Cognac", "Black"] };
 
 export const products: Product[] = [
   {
-    id: "petal-hoops",
-    slug: "petal-hoops",
-    name: "Petal Hoops",
-    collection: "earrings",
-    price: 42,
-    images: ["/images/product-1.jpg", "/images/hero.jpg", "/images/collection-earrings.jpg"],
+    id: "birch-studs",
+    slug: "birch-studs",
+    name: "Birch Studs",
+    material: "wood",
+    style: "Studs",
+    price: 24,
+    images: ["/images/product-1.jpg", "/images/hero.jpg", "/images/material-wood.jpg"],
     badge: "bestseller",
     bestSeller: true,
-    shortDescription: "Lightweight handmade hoops designed for everyday wear.",
+    shortDescription: "Lightweight CNC-cut wood studs for everyday wear.",
     description:
-      "A softly rounded hoop, shaped and polished by hand. Light enough to wear from a morning coffee to a late dinner — the kind of pair you reach for without thinking. A quiet, giftable everyday piece.",
-    materials: ["14k gold fill", "Hypoallergenic posts"],
-    details: ["Under 2g each", "20mm diameter", "Secure click closure"],
-    care: ["Keep dry; remove before swimming", "Wipe gently with a soft cloth"],
-    variants: [GOLD_SILVER],
+      "A small, smooth wood stud cut on the CNC and sanded by hand. Light enough to forget you're wearing them — the pair you reach for on a normal Tuesday. Warm, simple, and easy to gift.",
+    materials: ["Light maple", "Hand-sealed finish", "Surgical steel posts"],
+    details: ["Featherlight — under 1g", "10mm", "Nickel-free posts"],
+    care: ["Keep dry; wipe with a soft cloth", "Avoid soaking or perfume"],
+    variants: [FINISH_LIGHT],
   },
   {
-    id: "linen-chain-necklace",
-    slug: "linen-chain-necklace",
-    name: "Linen Chain Necklace",
-    collection: "necklaces",
-    price: 58,
-    images: ["/images/product-2.jpg", "/images/hero.jpg", "/images/collection-necklaces.jpg"],
+    id: "aspen-hoops",
+    slug: "aspen-hoops",
+    name: "Aspen Hoops",
+    material: "wood",
+    style: "Hoops",
+    price: 32,
+    images: ["/images/product-2.jpg", "/images/material-wood.jpg", "/images/hero.jpg"],
     badge: "bestseller",
     bestSeller: true,
-    shortDescription: "A fine everyday chain that layers beautifully.",
+    shortDescription: "Warm wooden hoops with an easy, everyday swing.",
     description:
-      "A whisper-fine chain with just enough weight to feel substantial. Wear it on its own for something quiet, or layer it with a pendant. It sits close to the collarbone and never tangles when you take it off.",
-    materials: ["14k gold fill", "Lobster clasp"],
-    details: ["Adjustable 16–18 in", "Lightweight, tangle-resistant", "Lays flat on the skin"],
-    care: ["Store flat or hung", "Avoid lotions and perfume"],
-    variants: [GOLD_SILVER, LENGTHS],
+      "An open wooden hoop, cut clean and sanded smooth. It catches the light with a warm, natural grain and stays light on the ear all day. Quiet enough for work, pretty enough for after.",
+    materials: ["Light walnut", "Hand-sealed finish", "Surgical steel hooks"],
+    details: ["Under 2g each", "35mm drop", "Smooth, snag-free edges"],
+    care: ["Keep dry", "Store flat, out of direct sun"],
+    variants: [FINISH_LIGHT, HARDWARE],
   },
   {
-    id: "hawthorn-studs",
-    slug: "hawthorn-studs",
-    name: "Hawthorn Studs",
-    collection: "earrings",
-    price: 36,
-    images: ["/images/product-3.jpg", "/images/collection-earrings.jpg", "/images/hero.jpg"],
+    id: "meadow-drops",
+    slug: "meadow-drops",
+    name: "Meadow Drops",
+    material: "wood",
+    style: "Drops",
+    price: 30,
+    images: ["/images/product-3.jpg", "/images/material-wood.jpg", "/images/banner-lifestyle.jpg"],
     badge: "handmade",
-    shortDescription: "Faceted studs that catch the light, quietly.",
+    shortDescription: "Laser-cut botanical drops in light wood.",
     description:
-      "Small, faceted studs that throw a little light without ever feeling loud. The pair you can sleep in, travel with, and pass along — comfortable enough to forget, pretty enough to notice.",
-    materials: ["Sterling silver", "Cubic zirconia", "Butterfly backs"],
-    details: ["5mm face", "Featherweight", "Posts sit flush to the ear"],
-    care: ["Remove before showering", "Polish with a soft cloth"],
-    variants: [GOLD_SILVER],
+      "A slender leaf shape, laser-cut from light wood and finished by hand. It moves softly when you do and keeps an outfit feeling calm and considered. A little nod to the outdoors you can wear anywhere.",
+    materials: ["Light maple", "Laser-cut detail", "Surgical steel hooks"],
+    details: ["Lightweight on the ear", "40mm drop", "Open hook closure"],
+    care: ["Keep dry", "Wipe gently with a soft cloth"],
+    variants: [FINISH_LIGHT],
   },
   {
-    id: "dew-pearl-pendant",
-    slug: "dew-pearl-pendant",
-    name: "Dew Pearl Pendant",
-    collection: "necklaces",
-    price: 64,
-    images: ["/images/product-4.jpg", "/images/collection-necklaces.jpg", "/images/banner-lifestyle.jpg"],
-    badge: "bestseller",
-    bestSeller: true,
-    shortDescription: "A single freshwater pearl on a fine chain.",
-    description:
-      "One small freshwater pearl, each a little different, suspended from a fine chain. A soft, giftable piece that feels considered without trying too hard — lovely for a birthday, a thank-you, or no reason at all.",
-    materials: ["Freshwater pearl", "14k gold fill chain"],
-    details: ["Adjustable 16–18 in", "Pearl 6–7mm", "Naturally one of a kind"],
-    care: ["Put on last, take off first", "Keep away from water"],
-    variants: [GOLD_SILVER, LENGTHS],
-  },
-  {
-    id: "field-band-ring",
-    slug: "field-band-ring",
-    name: "Field Band Ring",
-    collection: "rings",
-    price: 48,
-    images: ["/images/product-5.jpg", "/images/collection-rings.jpg"],
+    id: "quarry-geometrics",
+    slug: "quarry-geometrics",
+    name: "Quarry Geometrics",
+    material: "wood",
+    style: "Statement",
+    price: 38,
+    images: ["/images/product-4.jpg", "/images/material-wood.jpg"],
     badge: "new",
     isNew: true,
-    shortDescription: "A slim, smooth band made for stacking.",
-    description:
-      "A slim band with gently rounded edges, finished by hand so it never catches. Wear one on its own or stack a few — it's the quiet base layer the rest of your rings are built around.",
-    materials: ["14k gold fill", "Solid band"],
-    details: ["1.5mm wide", "Comfort-fit interior", "Smooth, snag-free edges"],
-    care: ["Remove for heavy tasks", "Buff with a soft cloth"],
-    variants: [GOLD_SILVER, RING_SIZES],
-  },
-  {
-    id: "makers-bead-bracelet",
-    slug: "makers-bead-bracelet",
-    name: "Maker's Bead Bracelet",
-    collection: "bracelets",
-    price: 52,
-    images: ["/images/product-6.jpg", "/images/collection-bracelets.jpg"],
-    badge: "handmade",
-    shortDescription: "Hand-strung beads with a soft weight on the wrist.",
-    description:
-      "Strung one bead at a time on a durable cord, with a little gold detail to finish. A relaxed, everyday bracelet that adds warmth to a stack — softly worn-in from the very first day.",
-    materials: ["Glass and brass beads", "Gold-fill accent", "Stretch cord"],
-    details: ["Fits most wrists", "No clasp to fuss with", "Soft, flexible fit"],
-    care: ["Roll on and off gently", "Keep dry"],
-    variants: [{ name: "Tone", options: ["Sage", "Sand", "Stone"] }],
-  },
-  {
-    id: "keepsake-pendant",
-    slug: "keepsake-pendant",
-    name: "Keepsake Pendant",
-    collection: "necklaces",
-    price: 72,
-    images: ["/images/product-7.jpg", "/images/personalized.jpg", "/images/banner-lifestyle.jpg"],
-    badge: "custom",
-    bestSeller: true,
     personalizable: true,
-    shortDescription: "A hand-stamped pendant, personalized for someone you love.",
+    shortDescription: "Bold geometric wood — engrave it if you'd like.",
     description:
-      "A smooth little pendant we hand-stamp with an initial, a date, or a short word — whatever you'd like it to hold. It arrives gift-ready in a linen pouch, made to be kept and worn for years.",
-    materials: ["14k gold fill", "Hand-stamped by us"],
-    details: ["Up to 8 characters", "Adjustable 16–18 in", "Arrives in a linen gift pouch"],
-    care: ["Wipe gently to keep the stamp crisp", "Avoid water and lotion"],
-    variants: [GOLD_SILVER, LENGTHS],
+      "A clean geometric shape cut on the CNC for a bit more presence. Surprisingly light for its size, and a lovely blank canvas — add a small initial or date and we'll engrave it for you, gift-ready.",
+    materials: ["Light walnut", "CNC-cut", "Surgical steel posts"],
+    details: ["Lightweight despite the size", "45mm", "Optional hand engraving"],
+    care: ["Keep dry", "Avoid soaking and perfume"],
+    variants: [FINISH_LIGHT, HARDWARE],
   },
   {
-    id: "willow-drops",
-    slug: "willow-drops",
-    name: "Willow Drops",
-    collection: "earrings",
-    price: 46,
-    images: ["/images/product-8.jpg", "/images/hero.jpg", "/images/collection-earrings.jpg"],
+    id: "saddle-teardrops",
+    slug: "saddle-teardrops",
+    name: "Saddle Teardrops",
+    material: "leather",
+    style: "Drops",
+    price: 28,
+    images: ["/images/product-5.jpg", "/images/material-leather.jpg", "/images/hero.jpg"],
+    badge: "bestseller",
+    bestSeller: true,
+    shortDescription: "Soft leather teardrops that move with you.",
+    description:
+      "A simple teardrop cut from genuine leather — soft, light, and full of easy movement. Broken-in from the first wear, it's the kind of pair that just goes with everything.",
+    materials: ["Genuine leather", "Surgical steel hooks"],
+    details: ["Featherlight", "45mm drop", "Soft, flexible feel"],
+    care: ["Keep dry", "Reshape gently if needed"],
+    variants: [LEATHER_TONE],
+  },
+  {
+    id: "fringe-danglers",
+    slug: "fringe-danglers",
+    name: "Fringe Danglers",
+    material: "leather",
+    style: "Statement",
+    price: 34,
+    images: ["/images/product-6.jpg", "/images/material-leather.jpg"],
+    badge: "handmade",
+    shortDescription: "Hand-cut leather fringe with plenty of swing.",
+    description:
+      "Fine leather fringe, hand-cut to fall and sway with you. A statement that still feels soft and wearable — light on the ear, with a relaxed, handmade edge.",
+    materials: ["Genuine leather", "Surgical steel hooks"],
+    details: ["Light despite the length", "65mm drop", "Soft movement"],
+    care: ["Keep dry", "Store hanging to keep the shape"],
+    variants: [LEATHER_TONE],
+  },
+  {
+    id: "harvest-studs",
+    slug: "harvest-studs",
+    name: "Harvest Studs",
+    material: "leather",
+    style: "Studs",
+    price: 22,
+    images: ["/images/product-7.jpg", "/images/material-leather.jpg"],
     badge: "new",
     isNew: true,
-    shortDescription: "Slender drop earrings with an easy, fluid swing.",
+    shortDescription: "Tiny leather studs in warm, earthy tones.",
     description:
-      "A long, slender drop that moves with you — graceful but never heavy. Light on the ear and easy to wear up or down, it's the piece that quietly pulls an outfit together.",
-    materials: ["14k gold fill", "Hypoallergenic hooks"],
-    details: ["32mm drop", "Lightweight on the ear", "Open hook closure"],
-    care: ["Store hung to keep the shape", "Keep dry"],
-    variants: [GOLD_SILVER],
+      "A small leather disc on a steel post — understated and comfortable enough to wear every day. Warm, earthy, and quietly different from the usual stud.",
+    materials: ["Genuine leather", "Surgical steel posts"],
+    details: ["Featherlight", "12mm", "Nickel-free posts"],
+    care: ["Keep dry", "Wipe gently"],
+    variants: [LEATHER_TONE],
+  },
+  {
+    id: "grove-mixed-drops",
+    slug: "grove-mixed-drops",
+    name: "Grove Mixed Drops",
+    material: "mixed",
+    style: "Drops",
+    price: 36,
+    images: ["/images/product-8.jpg", "/images/material-mixed.jpg", "/images/banner-lifestyle.jpg"],
+    badge: "handmade",
+    shortDescription: "Light wood paired with leather and a hint of brass.",
+    description:
+      "Wood, leather, and a small brass accent brought together in one easy drop. The materials play off each other — warm grain, soft leather, a little shine — while staying light and wearable.",
+    materials: ["Light maple", "Genuine leather", "Brass accent", "Surgical steel hooks"],
+    details: ["Lightweight", "42mm drop", "Mixed-material detail"],
+    care: ["Keep dry", "Wipe gently; avoid soaking"],
+    variants: [FINISH_LIGHT, LEATHER_TONE],
   },
 ];
 
@@ -190,24 +189,23 @@ export const products: Product[] = [
 /* async + Promise-returning so they can be swapped for Supabase queries with
    no change at the call sites. */
 
-export async function getCollections(): Promise<Collection[]> {
-  return collections;
+export async function getMaterials(): Promise<Material[]> {
+  return materials;
 }
 
-export async function getCollection(slug: string): Promise<Collection | undefined> {
-  return collections.find((c) => c.slug === slug);
+export async function getMaterial(slug: string): Promise<Material | undefined> {
+  return materials.find((m) => m.slug === slug);
 }
 
-export async function getProducts(): Promise<Product[]> {
+export async function getProducts(material?: string): Promise<Product[]> {
+  if (material && material !== "all") {
+    return products.filter((p) => p.material === material);
+  }
   return products;
 }
 
 export async function getProduct(slug: string): Promise<Product | undefined> {
   return products.find((p) => p.slug === slug);
-}
-
-export async function getProductsByCollection(slug: string): Promise<Product[]> {
-  return products.filter((p) => p.collection === slug);
 }
 
 export async function getBestSellers(limit = 4): Promise<Product[]> {
@@ -218,15 +216,15 @@ export async function getNewArrivals(limit = 4): Promise<Product[]> {
   return products.filter((p) => p.isNew).slice(0, limit);
 }
 
-export async function getFeaturedCollections(limit = 3): Promise<Collection[]> {
-  return collections.slice(0, limit);
+export async function getPersonalizable(): Promise<Product[]> {
+  return products.filter((p) => p.personalizable);
 }
 
-/** All slugs, for generateStaticParams. */
+/** Other earrings for "you may also like", excluding the given slug. */
+export async function getRelated(slug: string, limit = 4): Promise<Product[]> {
+  return products.filter((p) => p.slug !== slug).slice(0, limit);
+}
+
 export function allProductSlugs(): string[] {
   return products.map((p) => p.slug);
-}
-
-export function allCollectionSlugs(): string[] {
-  return collections.map((c) => c.slug);
 }

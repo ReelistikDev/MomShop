@@ -1,5 +1,5 @@
-// One-off: pull a curated, on-theme set of warm editorial jewelry/lifestyle
-// photos from Unsplash's public search into /public/images.
+// One-off: pull a curated, on-theme set of handmade WOOD + LEATHER EARRING
+// photos (and a maker/workshop story shot) from Unsplash into /public/images.
 // These are PLACEHOLDERS — swap with the brand's own product photography.
 //
 // Unsplash's napi rejects programmatic fetch() (401) but is fine via curl,
@@ -28,97 +28,91 @@ function curlDownload(url, dest) {
 const SPECS = [
   {
     file: "hero.jpg", orientation: "landscape", width: 2000,
-    queries: ["woman wearing delicate gold necklace", "woman gold jewelry neutral"],
-    include: ["necklace", "earring", "jewelry", "jewellery"],
-    exclude: ["man ", "cross", "bathing", "lingerie"],
+    queries: ["woman wearing wooden statement earrings", "woman wearing wooden earrings", "model wearing wood earrings"],
+    include: ["earring"],
+    exclude: ["man ", "gold", "diamond"],
   },
   {
     file: "banner-craft.jpg", orientation: "landscape", width: 1800,
-    queries: ["jeweler workbench making jewelry", "jewelry making hands tools"],
-    include: ["workbench", "jeweler", "making", "polishing", "workshop", "tools", "craft"],
+    queries: ["woodworking laser cut craft", "carving wood workshop hands", "wood maker workshop tools"],
+    include: ["wood", "laser", "carv", "workshop", "craft", "maker", "workbench", "saw", "tools"],
     exclude: [],
   },
   {
     file: "banner-lifestyle.jpg", orientation: "landscape", width: 1800,
-    queries: ["gold jewelry flat lay neutral", "minimal jewelry styled neutral"],
-    include: ["jewelry", "jewellery", "necklace", "earring", "flat lay", "flatlay", "accessories", "rings"],
-    exclude: ["lingerie", "bathing", "bikini", "man "],
+    queries: ["wooden earrings flat lay neutral", "handmade earrings flat lay linen", "wood jewelry styled neutral"],
+    include: ["earring", "wood", "leather", "flat lay", "flatlay"],
+    exclude: ["man ", "gold ring", "diamond"],
   },
   {
-    file: "personalized.jpg", orientation: "landscape", width: 1600,
-    queries: ["initial pendant necklace gold", "personalized name necklace", "engraved pendant necklace"],
-    include: ["pendant", "necklace", "initial", "engrav", "letter", "monogram"],
-    exclude: ["man ", "bathing"],
-  },
-  {
-    file: "about.jpg", orientation: "portrait", width: 1200,
-    queries: ["jewelry maker workbench hands", "artisan jewelry studio", "jeweler crafting"],
-    include: ["jeweler", "workbench", "making", "hands", "studio", "craft", "tools", "artisan"],
-    exclude: ["cross", "couple"],
-  },
-  {
-    file: "collection-earrings.jpg", orientation: "portrait", width: 1100,
-    queries: ["gold earrings minimal", "dangle earrings neutral", "earrings jewelry"],
-    include: ["earring"],
-    exclude: ["pillar", "knob", "building"],
-  },
-  {
-    file: "collection-necklaces.jpg", orientation: "portrait", width: 1100,
-    queries: ["delicate gold necklace", "layered necklaces neutral", "gold chain necklace"],
-    include: ["necklace", "chain", "pendant"],
+    file: "custom.jpg", orientation: "landscape", width: 1600,
+    queries: ["laser engraving wood", "wood earrings making process", "carving wood earrings detail"],
+    include: ["wood", "earring", "engrav", "laser", "carv", "craft"],
     exclude: ["man "],
   },
   {
-    file: "collection-rings.jpg", orientation: "portrait", width: 1100,
-    queries: ["stacking gold rings", "minimal gold ring hand", "gold rings jewelry"],
-    include: ["ring"],
-    exclude: ["earring", "wreath", "phone", "boxing", "ring light"],
+    file: "about.jpg", orientation: "portrait", width: 1200,
+    queries: ["woman maker wood studio hands", "artisan wood jewelry studio", "craftswoman workshop wood"],
+    include: ["wood", "studio", "maker", "hands", "workshop", "craft", "carv", "artisan"],
+    exclude: ["cross", "couple"],
   },
   {
-    file: "collection-bracelets.jpg", orientation: "portrait", width: 1100,
-    queries: ["gold bracelet wrist", "beaded bracelet handmade", "bangle bracelet gold"],
-    include: ["bracelet", "bangle", "beaded", "wrist"],
-    exclude: [],
+    file: "material-wood.jpg", orientation: "portrait", width: 1100,
+    queries: ["wooden earrings", "wood earrings handmade", "wood dangle earrings"],
+    include: ["earring"],
+    exclude: ["gold", "diamond"],
+  },
+  {
+    file: "material-leather.jpg", orientation: "portrait", width: 1100,
+    queries: ["leather earrings", "leather earrings handmade", "leather statement earrings"],
+    include: ["earring"],
+    exclude: ["gold", "diamond"],
+  },
+  {
+    file: "material-mixed.jpg", orientation: "portrait", width: 1100,
+    queries: ["geometric statement earrings neutral", "modern wood earrings", "handmade dangle earrings neutral"],
+    include: ["earring"],
+    exclude: ["gold", "diamond"],
   },
   {
     file: "product-1.jpg", orientation: "squarish", width: 1000,
-    queries: ["gold hoop earrings", "hoop earrings neutral", "gold earrings white"],
-    include: ["hoop", "earring"], exclude: ["pillar", "knob"],
+    queries: ["wood stud earrings", "wooden stud earrings neutral", "small wood earrings"],
+    include: ["earring"], exclude: ["gold", "diamond"],
   },
   {
     file: "product-2.jpg", orientation: "squarish", width: 1000,
-    queries: ["dainty gold necklace neutral", "thin gold chain necklace", "delicate necklace"],
-    include: ["necklace", "chain", "pendant"], exclude: ["man "],
+    queries: ["wooden hoop earrings", "wood hoop earrings neutral", "round wood earrings"],
+    include: ["earring"], exclude: ["gold", "diamond"],
   },
   {
     file: "product-3.jpg", orientation: "squarish", width: 1000,
-    queries: ["gold stud earrings", "small stud earrings neutral", "minimal earrings"],
-    include: ["stud", "earring"], exclude: ["knob", "pillar"],
+    queries: ["laser cut wood earrings", "geometric wood earrings", "wood drop earrings"],
+    include: ["earring"], exclude: ["gold", "diamond"],
   },
   {
     file: "product-4.jpg", orientation: "squarish", width: 1000,
-    queries: ["pearl pendant necklace", "pearl necklace neutral", "freshwater pearl jewelry"],
-    include: ["pearl", "necklace", "pendant"], exclude: ["bathing", "bikini"],
+    queries: ["wood statement earrings", "large wooden earrings", "wood dangle earrings neutral"],
+    include: ["earring"], exclude: ["gold", "diamond"],
   },
   {
     file: "product-5.jpg", orientation: "squarish", width: 1000,
-    queries: ["thin gold ring", "minimal gold band ring", "gold ring white background"],
-    include: ["ring"], exclude: ["earring", "couple", "wreath", "ring light", "phone"],
+    queries: ["leather earrings handmade", "leather drop earrings", "leather teardrop earrings"],
+    include: ["earring"], exclude: ["gold", "diamond"],
   },
   {
     file: "product-6.jpg", orientation: "squarish", width: 1000,
-    queries: ["beaded bracelet handmade", "gold bracelet neutral", "bangle jewelry"],
-    include: ["bracelet", "bangle", "beaded"], exclude: ["wreath"],
+    queries: ["leather statement earrings", "leather fringe earrings", "leather dangle earrings"],
+    include: ["earring"], exclude: ["gold", "diamond"],
   },
   {
     file: "product-7.jpg", orientation: "squarish", width: 1000,
-    queries: ["gold pendant necklace", "pendant jewelry neutral", "charm necklace gold"],
-    include: ["pendant", "necklace", "charm"], exclude: ["man "],
+    queries: ["leather stud earrings", "small leather earrings", "minimal leather earrings"],
+    include: ["earring"], exclude: ["gold", "diamond"],
   },
   {
     file: "product-8.jpg", orientation: "squarish", width: 1000,
-    queries: ["gold drop earrings", "dangle earrings gold", "statement earrings neutral"],
-    include: ["earring", "drop", "dangle"], exclude: ["ball", "knob"],
+    queries: ["handmade dangle earrings neutral", "modern earrings neutral background", "boho earrings handmade"],
+    include: ["earring"], exclude: ["gold", "diamond"],
   },
 ];
 

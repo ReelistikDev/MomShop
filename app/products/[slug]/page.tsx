@@ -6,16 +6,12 @@ import { Badge } from "@/components/ui/badge";
 import { ProductGallery } from "@/components/product-gallery";
 import { ProductCard } from "@/components/product-card";
 import { AddToCart } from "@/components/cart/add-to-cart";
-import {
-  FeatherIcon,
-  GiftIcon,
-  LeafIcon,
-} from "@/components/icons";
+import { FeatherIcon, GiftIcon, LeafIcon } from "@/components/icons";
 import {
   allProductSlugs,
-  getCollection,
+  getMaterial,
   getProduct,
-  getProductsByCollection,
+  getRelated,
 } from "@/lib/data";
 import { formatPrice } from "@/lib/utils";
 
@@ -53,11 +49,10 @@ export default async function ProductPage({
   const product = await getProduct(slug);
   if (!product) notFound();
 
-  const [collection, related] = await Promise.all([
-    getCollection(product.collection),
-    getProductsByCollection(product.collection),
+  const [material, related] = await Promise.all([
+    getMaterial(product.material),
+    getRelated(slug, 4),
   ]);
-  const youMayLike = related.filter((p) => p.id !== product.id).slice(0, 4);
 
   return (
     <>
@@ -67,13 +62,13 @@ export default async function ProductPage({
             Shop
           </Link>
           <span>/</span>
-          {collection && (
+          {material && (
             <>
               <Link
-                href={`/collections/${collection.slug}`}
+                href={`/shop?material=${material.slug}`}
                 className="hover:text-ink"
               >
-                {collection.name}
+                {material.name}
               </Link>
               <span>/</span>
             </>
@@ -86,7 +81,12 @@ export default async function ProductPage({
         <ProductGallery images={product.images} name={product.name} />
 
         <div className="lg:py-4">
-          {product.badge && <Badge type={product.badge} />}
+          <div className="flex items-center gap-3">
+            {product.badge && <Badge type={product.badge} />}
+            <span className="text-[0.72rem] font-semibold uppercase tracking-[0.16em] text-mist">
+              {product.style}
+            </span>
+          </div>
           <h1 className="text-h1 mt-3">{product.name}</h1>
           <p className="mt-3 text-2xl tabular-nums text-stone">
             {formatPrice(product.price)}
@@ -101,14 +101,16 @@ export default async function ProductPage({
 
           <div className="mt-8 flex flex-col gap-3 rounded-card bg-shell px-5 py-5">
             {TRUST.map(({ Icon, label }) => (
-              <div key={label} className="flex items-center gap-3 text-[0.92rem] text-stone">
+              <div
+                key={label}
+                className="flex items-center gap-3 text-[0.92rem] text-stone"
+              >
                 <Icon className="h-5 w-5 shrink-0 text-sage-dark" />
                 {label}
               </div>
             ))}
           </div>
 
-          {/* Specs */}
           <dl className="mt-10 grid gap-8 sm:grid-cols-3">
             <Spec title="Materials" items={product.materials} />
             <Spec title="Details" items={product.details} />
@@ -117,11 +119,11 @@ export default async function ProductPage({
         </div>
       </Container>
 
-      {youMayLike.length > 0 && (
+      {related.length > 0 && (
         <Container className="py-16 lg:py-24">
           <h2 className="text-h2 mb-10 text-center">You may also like</h2>
           <div className="grid grid-cols-2 gap-x-5 gap-y-10 lg:grid-cols-4">
-            {youMayLike.map((p) => (
+            {related.map((p) => (
               <ProductCard key={p.id} product={p} />
             ))}
           </div>
@@ -140,10 +142,7 @@ function Spec({ title, items }: { title: string; items: string[] }) {
       <dd>
         <ul className="mt-3 space-y-2">
           {items.map((item) => (
-            <li
-              key={item}
-              className="text-[0.92rem] leading-relaxed text-stone"
-            >
+            <li key={item} className="text-[0.92rem] leading-relaxed text-stone">
               {item}
             </li>
           ))}

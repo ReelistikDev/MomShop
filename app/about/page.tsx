@@ -6,7 +6,7 @@ import { BRAND } from "@/lib/brand";
 
 export const metadata: Metadata = {
   title: "About",
-  description: `The story behind ${BRAND.name} — handmade jewelry made in small batches with care.`,
+  description: `The story behind ${BRAND.name} — handmade wood and leather earrings, made in small batches with care.`,
 };
 
 export default function AboutPage() {
@@ -18,23 +18,23 @@ export default function AboutPage() {
           <div className="max-w-xl">
             <span className="eyebrow">Our story</span>
             <h1 className="text-display mt-4 text-balance">
-              Made slowly, <span className="italic text-sage-dark">made to keep.</span>
+              One maker, <span className="italic text-sage-dark">one pair at a time.</span>
             </h1>
             <p className="mt-6 text-lg leading-relaxed text-stone">
-              {BRAND.name} began at a small workbench with a simple idea: jewelry
-              you can actually wear every day — light, comfortable, and made well
-              enough to last.
+              {BRAND.name} started at a small home workbench — a love of working
+              with wood and leather, and a simple goal: earrings light enough to
+              wear all day, made well enough to keep.
             </p>
             <p className="mt-4 leading-relaxed text-stone">
-              We design and finish each piece by hand, in small batches. Nothing
-              is mass-produced, and nothing leaves the studio until it&apos;s
-              right. {BRAND.location}.
+              Every shape is cut on the CNC for clean, repeatable lines, then
+              sanded, sealed, and assembled by hand. Nothing is mass-produced,
+              and nothing leaves the studio until it&apos;s right. {BRAND.location}.
             </p>
           </div>
           <div className="relative aspect-[4/5] w-full overflow-hidden rounded-card shadow-card">
             <Image
               src="/images/about.jpg"
-              alt="A jeweler at the workbench finishing a piece by hand"
+              alt="At the workbench, finishing a pair by hand"
               fill
               priority
               sizes="(max-width: 1024px) 100vw, 50vw"
@@ -48,11 +48,11 @@ export default function AboutPage() {
       <section className="bg-linen py-16 lg:py-24">
         <Container size="narrow" className="text-center">
           <p className="font-serif text-[1.7rem] leading-snug text-ink lg:text-[2.1rem]">
-            “We&apos;d rather make a few things carefully than many things
-            quickly. Every piece should feel like it was made for someone.”
+            “I&apos;d rather make a few pairs carefully than a hundred quickly.
+            Every pair should feel like it was made for someone.”
           </p>
           <p className="mt-6 text-[0.8rem] font-semibold uppercase tracking-[0.18em] text-mist">
-            — The {BRAND.name} studio
+            — The maker behind {BRAND.name}
           </p>
         </Container>
       </section>
@@ -63,16 +63,16 @@ export default function AboutPage() {
           <div className="grid gap-10 md:grid-cols-3">
             {[
               {
-                title: "Small batches",
-                body: "We make in small runs so we can keep a close eye on quality and waste less along the way.",
+                title: "Light, natural materials",
+                body: "Light-toned wood and genuine leather — warm, comfortable, and kind to sensitive ears with nickel-free hardware.",
               },
               {
-                title: "Materials that last",
-                body: "Gold fill, sterling silver, and freshwater pearls — chosen to wear well and stay kind to sensitive skin.",
+                title: "Cut to order",
+                body: "Pairs are made a few at a time, so there's almost no waste — and it's easy to tweak a shape or finish just for you.",
               },
               {
                 title: "Made to be worn",
-                body: "Lightweight shapes and smooth, comfortable finishes designed for everyday life, not just special occasions.",
+                body: "Featherlight shapes and smooth, sealed finishes designed for everyday life, not just special occasions.",
               },
             ].map((v) => (
               <div key={v.title} className="border-t border-line pt-6">
@@ -89,7 +89,7 @@ export default function AboutPage() {
         <div className="relative min-h-[24rem] w-full overflow-hidden lg:min-h-[28rem]">
           <Image
             src="/images/banner-craft.jpg"
-            alt="Tools and a piece in progress at the jewelry bench"
+            alt="Cutting and engraving light wood in the studio"
             fill
             sizes="100vw"
             className="object-cover"
@@ -97,19 +97,19 @@ export default function AboutPage() {
           <div className="absolute inset-0 bg-gradient-to-t from-ink/60 to-ink/15" />
           <Container className="relative flex min-h-[24rem] flex-col items-center justify-center py-16 text-center text-cream lg:min-h-[28rem]">
             <h2 className="max-w-xl font-serif text-[2rem] leading-tight lg:text-[2.6rem]">
-              Find a piece to keep — or to give.
+              Find a pair to keep — or to give.
             </h2>
             <div className="mt-8 flex flex-wrap justify-center gap-3">
               <Button href="/shop" variant="primary" size="lg">
-                Shop the collection
+                Shop the earrings
               </Button>
               <Button
-                href="/personalized"
+                href="/custom"
                 variant="outline"
                 size="lg"
                 className="border-cream/40 text-cream hover:border-cream hover:bg-cream/10"
               >
-                Personalize a gift
+                Request a custom pair
               </Button>
             </div>
           </Container>

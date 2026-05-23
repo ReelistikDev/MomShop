@@ -16,15 +16,15 @@ export const metadata: Metadata = {
 const FAQS = [
   {
     q: "How long does an order take?",
-    a: "Most pieces ship within 3–5 business days. Personalized pieces are made to order and take a little longer — we'll always confirm.",
+    a: "Most pairs ship within 3–5 business days. Custom pairs are made to order and take a little longer — we'll always confirm timing.",
   },
   {
     q: "Do you take returns?",
-    a: "Unworn, non-personalized pieces can be returned within 30 days. Reach out and we'll make it easy.",
+    a: "Because earrings are personal, we accept returns on unworn, non-custom pairs within 14 days. Reach out and we'll make it easy.",
   },
   {
-    q: "How should I care for my jewelry?",
-    a: "Put it on last and take it off first, keep it dry, and store it flat. A soft cloth keeps the finish bright.",
+    q: "How do I care for wood and leather earrings?",
+    a: "Keep them dry — avoid soaking, perfume, and lotion — and wipe gently with a soft cloth. Store flat and out of direct sun to keep the finish warm.",
   },
 ];
 

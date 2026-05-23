@@ -2,33 +2,31 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { Container } from "@/components/ui/container";
 import { ProductCard } from "@/components/product-card";
-import { getCollections, getProducts } from "@/lib/data";
+import { getMaterials, getProducts } from "@/lib/data";
 import { cn } from "@/lib/utils";
 
 export const metadata: Metadata = {
-  title: "Shop",
+  title: "Shop earrings",
   description:
-    "Browse handmade earrings, necklaces, rings, and bracelets — lightweight pieces designed for everyday wear.",
+    "Browse handmade wood and leather earrings — lightweight pairs designed for everyday wear.",
 };
 
 export default async function ShopPage({
   searchParams,
 }: {
-  searchParams: Promise<{ collection?: string }>;
+  searchParams: Promise<{ material?: string }>;
 }) {
-  const { collection } = await searchParams;
-  const active = collection ?? "all";
-  const [products, collections] = await Promise.all([
-    getProducts(),
-    getCollections(),
+  const { material } = await searchParams;
+  const active = material ?? "all";
+  const [products, materials] = await Promise.all([
+    getProducts(active),
+    getMaterials(),
   ]);
 
-  const filtered =
-    active === "all"
-      ? products
-      : products.filter((p) => p.collection === active);
-
-  const chips = [{ slug: "all", name: "All" }, ...collections.map((c) => ({ slug: c.slug, name: c.name }))];
+  const chips = [
+    { slug: "all", name: "All" },
+    ...materials.map((m) => ({ slug: m.slug, name: m.name })),
+  ];
 
   return (
     <>
@@ -36,21 +34,21 @@ export default async function ShopPage({
         <Container className="py-14 text-center lg:py-20">
           <span className="eyebrow">The shop</span>
           <h1 className="text-h1 mt-3 text-balance">
-            Everyday jewelry, made by hand
+            Handmade earrings, light as can be
           </h1>
           <p className="mx-auto mt-4 max-w-xl leading-relaxed text-stone">
-            Lightweight, comfortable pieces in gold fill and sterling silver —
-            made in small batches and ready to gift.
+            CNC-cut wood, soft leather, and a little of both — made in small
+            batches and ready to gift.
           </p>
         </Container>
       </section>
 
       <Container className="py-12 lg:py-16">
-        {/* Filter chips */}
+        {/* Material filter chips */}
         <div className="mb-10 flex flex-wrap justify-center gap-2.5">
           {chips.map((chip) => {
             const isActive = active === chip.slug;
-            const href = chip.slug === "all" ? "/shop" : `/shop?collection=${chip.slug}`;
+            const href = chip.slug === "all" ? "/shop" : `/shop?material=${chip.slug}`;
             return (
               <Link
                 key={chip.slug}
@@ -69,11 +67,17 @@ export default async function ShopPage({
           })}
         </div>
 
-        <div className="grid grid-cols-2 gap-x-5 gap-y-12 md:grid-cols-3 xl:grid-cols-4">
-          {filtered.map((p, i) => (
-            <ProductCard key={p.id} product={p} priority={i < 4} />
-          ))}
-        </div>
+        {products.length > 0 ? (
+          <div className="grid grid-cols-2 gap-x-5 gap-y-12 md:grid-cols-3 xl:grid-cols-4">
+            {products.map((p, i) => (
+              <ProductCard key={p.id} product={p} priority={i < 4} />
+            ))}
+          </div>
+        ) : (
+          <p className="py-12 text-center text-stone">
+            New pairs are on the way — check back soon.
+          </p>
+        )}
       </Container>
     </>
   );
