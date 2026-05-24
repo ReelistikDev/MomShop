@@ -2,9 +2,12 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   images: {
-    // Product/lifestyle imagery is local (/public/images). Unsplash is allowed
-    // so the brand can drop in remote photography later without code changes.
-    remotePatterns: [{ protocol: "https", hostname: "images.unsplash.com" }],
+    // Supabase Storage serves product photos uploaded via the admin; Unsplash
+    // is allowed for any remote stand-in imagery.
+    remotePatterns: [
+      { protocol: "https", hostname: "*.supabase.co" },
+      { protocol: "https", hostname: "images.unsplash.com" },
+    ],
   },
 };
 

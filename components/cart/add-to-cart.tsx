@@ -9,20 +9,24 @@ import { cn } from "@/lib/utils";
 
 export function AddToCart({ product }: { product: Product }) {
   const { add } = useCart();
+  const variants = product.variants ?? [];
   const [options, setOptions] = useState<Record<string, string>>(() =>
-    Object.fromEntries(product.variants.map((v) => [v.name, v.options[0]]))
+    Object.fromEntries(variants.map((v) => [v.name, v.options[0]]))
   );
   const [engraving, setEngraving] = useState("");
   const [quantity, setQuantity] = useState(1);
 
+  const soldOut = Boolean(product.soldOut);
+
   function handleAdd() {
+    if (soldOut) return;
     add({
       productId: product.id,
       slug: product.slug,
       name: product.name,
       price: product.price,
-      image: product.images[0],
-      options,
+      image: product.images[0] ?? "",
+      options: variants.length > 0 ? options : undefined,
       engraving: engraving.trim() || undefined,
       quantity,
     });
@@ -30,7 +34,7 @@ export function AddToCart({ product }: { product: Product }) {
 
   return (
     <div className="flex flex-col gap-6">
-      {product.variants.map((variant) => (
+      {variants.map((variant) => (
         <div key={variant.name}>
           <div className="mb-2 flex items-center justify-between">
             <span className="text-[0.82rem] font-semibold uppercase tracking-[0.14em] text-stone">
@@ -85,7 +89,7 @@ export function AddToCart({ product }: { product: Product }) {
             className="h-12 w-full rounded-xl border border-line-strong bg-cream px-4 text-ink placeholder:text-mist focus:border-oak focus:outline-none"
           />
           <p className="mt-1.5 text-[0.82rem] text-mist">
-            Hand-engraved on the wood — leave blank for none.
+            Hand-engraved — leave blank for none.
           </p>
         </div>
       )}
@@ -95,8 +99,9 @@ export function AddToCart({ product }: { product: Product }) {
           <button
             type="button"
             onClick={() => setQuantity((q) => Math.max(1, q - 1))}
-            className="p-2.5 text-stone hover:text-ink"
+            className="p-2.5 text-stone hover:text-ink disabled:opacity-40"
             aria-label="Decrease quantity"
+            disabled={soldOut}
           >
             <MinusIcon />
           </button>
@@ -104,8 +109,9 @@ export function AddToCart({ product }: { product: Product }) {
           <button
             type="button"
             onClick={() => setQuantity((q) => q + 1)}
-            className="p-2.5 text-stone hover:text-ink"
+            className="p-2.5 text-stone hover:text-ink disabled:opacity-40"
             aria-label="Increase quantity"
+            disabled={soldOut}
           >
             <PlusIcon />
           </button>
@@ -115,8 +121,9 @@ export function AddToCart({ product }: { product: Product }) {
           size="lg"
           onClick={handleAdd}
           className="flex-1"
+          disabled={soldOut}
         >
-          Add to bag
+          {soldOut ? "Sold out" : "Add to bag"}
         </ActionButton>
       </div>
     </div>

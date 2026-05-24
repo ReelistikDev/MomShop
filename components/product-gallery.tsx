@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
+import { SprigIcon } from "@/components/icons";
 
 export function ProductGallery({
   images,
@@ -12,6 +13,17 @@ export function ProductGallery({
   name: string;
 }) {
   const [active, setActive] = useState(0);
+
+  if (images.length === 0) {
+    return (
+      <div className="flex flex-col gap-4">
+        <div className="relative flex aspect-[4/5] w-full items-center justify-center overflow-hidden rounded-card bg-linen shadow-soft">
+          <SprigIcon className="h-12 w-12 text-sage/70" />
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="flex flex-col gap-4">
       <div className="relative aspect-[4/5] w-full overflow-hidden rounded-card bg-shell shadow-soft">

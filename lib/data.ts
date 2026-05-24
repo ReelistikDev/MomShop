@@ -1,52 +1,197 @@
-import type { Material, Product } from "./types";
+import { getSupabase } from "./supabase";
+import type { Category, Product, ProductVariant } from "./types";
 
 /* ---------------------------------------------------------------------------
-   General handmade boutique — hats, earrings, shirts, stickers, and more.
+   Storefront data accessors, backed by the public (anon) Supabase client.
 
-   The catalog is intentionally EMPTY for now: the client will add their own
-   categories and products (via Supabase later). With nothing here, the UI
-   shows tasteful "Coming soon" states everywhere. Accessors stay async and
-   Supabase-shaped so wiring the database is a drop-in change.
+   Every accessor degrades gracefully: when `getSupabase()` is null (env not
+   configured) or a query errors, we return empty arrays / undefined so the
+   build works without a database and the UI falls back to "Coming soon".
+
+   RLS allows public read of active rows only, but we still scope queries to
+   `active = true` to be explicit and resilient to policy changes.
 --------------------------------------------------------------------------- */
 
-export const materials: Material[] = [];
-export const products: Product[] = [];
+type ProductRow = {
+  id: string;
+  slug: string;
+  name: string;
+  category: string | null;
+  price: number | string;
+  compare_at_price: number | string | null;
+  short_description: string | null;
+  description: string | null;
+  images: string[] | null;
+  badge: Product["badge"] | null;
+  variants: unknown;
+  sku: string | null;
+  featured: boolean | null;
+  sold_out: boolean | null;
+  active: boolean;
+  sort_order: number | null;
+  created_at: string;
+};
 
-export async function getMaterials(): Promise<Material[]> {
-  return materials;
+type CategoryRow = {
+  slug: string;
+  name: string;
+  description: string | null;
+  image: string | null;
+  sort_order: number | null;
+  active: boolean;
+};
+
+function mapProduct(row: ProductRow): Product {
+  return {
+    id: row.id,
+    slug: row.slug,
+    name: row.name,
+    price: Number(row.price),
+    images: row.images ?? [],
+    shortDescription: row.short_description ?? "",
+    description: row.description ?? "",
+    badge: row.badge ?? undefined,
+    category: row.category ?? undefined,
+    soldOut: row.sold_out ?? undefined,
+    featured: row.featured ?? undefined,
+    variants: Array.isArray(row.variants) ? (row.variants as ProductVariant[]) : [],
+  };
 }
 
-export async function getMaterial(slug: string): Promise<Material | undefined> {
-  return materials.find((m) => m.slug === slug);
+function mapCategory(row: CategoryRow): Category {
+  return {
+    slug: row.slug,
+    name: row.name,
+    description: row.description ?? "",
+    image: row.image,
+  };
 }
 
-export async function getProducts(material?: string): Promise<Product[]> {
-  if (material && material !== "all") {
-    return products.filter((p) => p.material === material);
+export async function getCategories(): Promise<Category[]> {
+  const supabase = getSupabase();
+  if (!supabase) return [];
+  const { data, error } = await supabase
+    .from("categories")
+    .select("slug, name, description, image, sort_order, active")
+    .eq("active", true)
+    .order("sort_order", { ascending: true });
+  if (error || !data) return [];
+  return (data as CategoryRow[]).map(mapCategory);
+}
+
+export async function getCategory(slug: string): Promise<Category | undefined> {
+  const supabase = getSupabase();
+  if (!supabase) return undefined;
+  const { data, error } = await supabase
+    .from("categories")
+    .select("slug, name, description, image, sort_order, active")
+    .eq("active", true)
+    .eq("slug", slug)
+    .maybeSingle();
+  if (error || !data) return undefined;
+  return mapCategory(data as CategoryRow);
+}
+
+export async function getProducts(category?: string): Promise<Product[]> {
+  const supabase = getSupabase();
+  if (!supabase) return [];
+  let query = supabase
+    .from("products")
+    .select("*")
+    .eq("active", true);
+  if (category && category !== "all") {
+    query = query.eq("category", category);
   }
-  return products;
+  const { data, error } = await query
+    .order("sort_order", { ascending: true })
+    .order("created_at", { ascending: true });
+  if (error || !data) return [];
+  return (data as ProductRow[]).map(mapProduct);
 }
 
 export async function getProduct(slug: string): Promise<Product | undefined> {
-  return products.find((p) => p.slug === slug);
+  const supabase = getSupabase();
+  if (!supabase) return undefined;
+  const { data, error } = await supabase
+    .from("products")
+    .select("*")
+    .eq("active", true)
+    .eq("slug", slug)
+    .maybeSingle();
+  if (error || !data) return undefined;
+  return mapProduct(data as ProductRow);
 }
 
-export async function getBestSellers(limit = 4): Promise<Product[]> {
-  return products.filter((p) => p.bestSeller).slice(0, limit);
-}
+export async function getFeatured(limit = 4): Promise<Product[]> {
+  const supabase = getSupabase();
+  if (!supabase) return [];
 
-export async function getNewArrivals(limit = 4): Promise<Product[]> {
-  return products.filter((p) => p.isNew).slice(0, limit);
-}
+  const { data: featured, error: featuredError } = await supabase
+    .from("products")
+    .select("*")
+    .eq("active", true)
+    .eq("featured", true)
+    .order("sort_order", { ascending: true })
+    .order("created_at", { ascending: false })
+    .limit(limit);
 
-export async function getPersonalizable(): Promise<Product[]> {
-  return products.filter((p) => p.personalizable);
+  if (!featuredError && featured && featured.length > 0) {
+    return (featured as ProductRow[]).map(mapProduct);
+  }
+
+  // Fallback: most-recent active products when nothing is flagged featured.
+  const { data: recent, error: recentError } = await supabase
+    .from("products")
+    .select("*")
+    .eq("active", true)
+    .order("created_at", { ascending: false })
+    .limit(limit);
+  if (recentError || !recent) return [];
+  return (recent as ProductRow[]).map(mapProduct);
 }
 
 export async function getRelated(slug: string, limit = 4): Promise<Product[]> {
-  return products.filter((p) => p.slug !== slug).slice(0, limit);
+  const supabase = getSupabase();
+  if (!supabase) return [];
+
+  const current = await getProduct(slug);
+
+  // Prefer products in the same category, excluding the current one.
+  if (current?.category) {
+    const { data, error } = await supabase
+      .from("products")
+      .select("*")
+      .eq("active", true)
+      .eq("category", current.category)
+      .neq("slug", slug)
+      .order("sort_order", { ascending: true })
+      .order("created_at", { ascending: true })
+      .limit(limit);
+    if (!error && data && data.length > 0) {
+      return (data as ProductRow[]).map(mapProduct);
+    }
+  }
+
+  // Fallback: any other active products.
+  const { data, error } = await supabase
+    .from("products")
+    .select("*")
+    .eq("active", true)
+    .neq("slug", slug)
+    .order("sort_order", { ascending: true })
+    .order("created_at", { ascending: true })
+    .limit(limit);
+  if (error || !data) return [];
+  return (data as ProductRow[]).map(mapProduct);
 }
 
-export function allProductSlugs(): string[] {
-  return products.map((p) => p.slug);
+export async function allProductSlugs(): Promise<string[]> {
+  const supabase = getSupabase();
+  if (!supabase) return [];
+  const { data, error } = await supabase
+    .from("products")
+    .select("slug")
+    .eq("active", true);
+  if (error || !data) return [];
+  return (data as { slug: string }[]).map((r) => r.slug);
 }

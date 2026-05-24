@@ -2,6 +2,7 @@ import { Container } from "@/components/ui/container";
 import { Button } from "@/components/ui/button";
 import { SectionHeading } from "@/components/ui/section-heading";
 import { ComingSoonCard } from "@/components/placeholders";
+import { ProductCard } from "@/components/product-card";
 import { NewsletterForm } from "@/components/newsletter";
 import {
   ArrowRightIcon,
@@ -12,6 +13,7 @@ import {
   SprigIcon,
 } from "@/components/icons";
 import { BRAND } from "@/lib/brand";
+import { getFeatured } from "@/lib/data";
 
 const VALUES = [
   {
@@ -31,7 +33,9 @@ const VALUES = [
   },
 ];
 
-export default function HomePage() {
+export default async function HomePage() {
+  const featured = await getFeatured(4);
+
   return (
     <>
       {/* ----------------------------- Hero ----------------------------- */}
@@ -63,21 +67,44 @@ export default function HomePage() {
         </Container>
       </section>
 
-      {/* --------------------------- Coming soon --------------------------- */}
+      {/* --------------------------- New in the shop --------------------------- */}
       <section className="bg-linen py-16 lg:py-24">
         <Container>
-          <SectionHeading
-            eyebrow="The shop"
-            title="New things, coming soon"
-            intro="We're stocking the shelves — hats, earrings, shirts, stickers, and more on the way."
-            align="center"
-            className="mx-auto"
-          />
-          <div className="mt-12 grid grid-cols-2 gap-5 lg:grid-cols-4">
-            {Array.from({ length: 4 }).map((_, i) => (
-              <ComingSoonCard key={i} />
-            ))}
-          </div>
+          {featured.length > 0 ? (
+            <>
+              <SectionHeading
+                eyebrow="The shop"
+                title="New in the shop"
+                intro="Fresh from the studio — a few handmade pieces ready to find a home."
+                align="center"
+                className="mx-auto"
+              />
+              <div className="mt-12 grid grid-cols-2 gap-x-5 gap-y-12 lg:grid-cols-4">
+                {featured.map((product, i) => (
+                  <ProductCard
+                    key={product.id}
+                    product={product}
+                    priority={i < 2}
+                  />
+                ))}
+              </div>
+            </>
+          ) : (
+            <>
+              <SectionHeading
+                eyebrow="The shop"
+                title="New things, coming soon"
+                intro="We're stocking the shelves — hats, earrings, shirts, stickers, and more on the way."
+                align="center"
+                className="mx-auto"
+              />
+              <div className="mt-12 grid grid-cols-2 gap-5 lg:grid-cols-4">
+                {Array.from({ length: 4 }).map((_, i) => (
+                  <ComingSoonCard key={i} />
+                ))}
+              </div>
+            </>
+          )}
           <div className="mt-10 text-center">
             <Button href="/shop" variant="outline" size="md">
               Visit the shop

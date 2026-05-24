@@ -7,16 +7,14 @@ import { ProductGallery } from "@/components/product-gallery";
 import { ProductCard } from "@/components/product-card";
 import { AddToCart } from "@/components/cart/add-to-cart";
 import { FeatherIcon, GiftIcon, LeafIcon } from "@/components/icons";
-import {
-  allProductSlugs,
-  getMaterial,
-  getProduct,
-  getRelated,
-} from "@/lib/data";
+import { getCategory, getProduct, getRelated } from "@/lib/data";
 import { formatPrice } from "@/lib/utils";
 
+export const dynamic = "force-dynamic";
+
+// Render product pages on demand (no build-time DB dependency).
 export function generateStaticParams() {
-  return allProductSlugs().map((slug) => ({ slug }));
+  return [];
 }
 
 export async function generateMetadata({
@@ -30,7 +28,8 @@ export async function generateMetadata({
   return {
     title: product.name,
     description: product.shortDescription,
-    openGraph: { images: [product.images[0]] },
+    openGraph:
+      product.images.length > 0 ? { images: [product.images[0]] } : undefined,
   };
 }
 
@@ -49,10 +48,15 @@ export default async function ProductPage({
   const product = await getProduct(slug);
   if (!product) notFound();
 
-  const [material, related] = await Promise.all([
-    getMaterial(product.material),
+  const [category, related] = await Promise.all([
+    product.category ? getCategory(product.category) : Promise.resolve(undefined),
     getRelated(slug, 4),
   ]);
+
+  const hasMaterials = (product.materials?.length ?? 0) > 0;
+  const hasDetails = (product.details?.length ?? 0) > 0;
+  const hasCare = (product.care?.length ?? 0) > 0;
+  const hasSpecs = hasMaterials || hasDetails || hasCare;
 
   return (
     <>
@@ -62,13 +66,13 @@ export default async function ProductPage({
             Shop
           </Link>
           <span>/</span>
-          {material && (
+          {category && (
             <>
               <Link
-                href={`/shop?material=${material.slug}`}
+                href={`/shop?category=${category.slug}`}
                 className="hover:text-ink"
               >
-                {material.name}
+                {category.name}
               </Link>
               <span>/</span>
             </>
@@ -82,10 +86,18 @@ export default async function ProductPage({
 
         <div className="lg:py-4">
           <div className="flex items-center gap-3">
-            {product.badge && <Badge type={product.badge} />}
-            <span className="text-[0.72rem] font-semibold uppercase tracking-[0.16em] text-mist">
-              {product.style}
-            </span>
+            {product.soldOut ? (
+              <span className="inline-flex items-center rounded-full bg-ink/90 px-2.5 py-1 text-[0.62rem] font-semibold uppercase tracking-[0.14em] text-cream">
+                Sold out
+              </span>
+            ) : (
+              product.badge && <Badge type={product.badge} />
+            )}
+            {product.style && (
+              <span className="text-[0.72rem] font-semibold uppercase tracking-[0.16em] text-mist">
+                {product.style}
+              </span>
+            )}
           </div>
           <h1 className="text-h1 mt-3">{product.name}</h1>
           <p className="mt-3 text-2xl tabular-nums text-stone">
@@ -111,11 +123,15 @@ export default async function ProductPage({
             ))}
           </div>
 
-          <dl className="mt-10 grid gap-8 sm:grid-cols-3">
-            <Spec title="Materials" items={product.materials} />
-            <Spec title="Details" items={product.details} />
-            <Spec title="Care" items={product.care} />
-          </dl>
+          {hasSpecs && (
+            <dl className="mt-10 grid gap-8 sm:grid-cols-3">
+              {hasMaterials && (
+                <Spec title="Materials" items={product.materials!} />
+              )}
+              {hasDetails && <Spec title="Details" items={product.details!} />}
+              {hasCare && <Spec title="Care" items={product.care!} />}
+            </dl>
+          )}
         </div>
       </Container>
 

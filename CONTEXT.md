@@ -114,17 +114,28 @@ BUILT + verified against the live DB this session:
 - Server actions use `getSupabaseAdmin()` (service role) + `revalidatePath`.
   Public newsletter/contact forms confirmed writing to Supabase (anon insert).
 
-REMAINING (next session):
-- **Finances** — still a ReadyPanel stub. Build: income/expense entries (CRUD),
-  income-vs-expense donut + category breakdown (hand-rolled SVG, no chart dep),
-  P&L by date range, receipt upload to `receipts` auto-linked to an expense.
-  Table `finance_transactions` already exists.
-- **Storefront wiring** — intentionally deferred (shop is "Coming soon" until
-  launch). When opening: point public `lib/data.ts` accessors at Supabase
-  (anon, active rows) and switch `/shop` + home grids from ComingSoonCard to
-  ProductCard; product detail (`(storefront)/products/[slug]`) still uses the
-  old `material` field/breadcrumb — realign to `category`.
-- Product enhancements later: multiple images, variants. Change ADMIN_PASSWORD.
+- **Finances** — BUILT + verified. `finances/page.tsx` (+ `actions.ts`,
+  `components/admin/finance-charts.tsx`): date-range filter, Income/Expenses/Net
+  stat cards, hand-rolled SVG income-vs-expense donut + expense-category bars,
+  a P&L statement, add-transaction form (income/expense, category datalist,
+  optional **receipt upload to the private `receipts` bucket**, stored as a path
+  → signed URLs for viewing), and a transactions table with delete.
+- **Storefront** — WIRED to Supabase (verified). `lib/data.ts` accessors read
+  active products/categories via the anon client (graceful empty fallback);
+  `/shop` shows a `ProductCard` grid + category filter chips when products
+  exist, else the "Coming soon" state; home shows featured products or
+  ComingSoonCards; `products/[slug]` renders from the DB (force-dynamic). With
+  the catalog empty, the storefront still reads "Coming soon" — it lights up
+  automatically as products are added in the admin.
+- `next.config.ts` allows `*.supabase.co` images (Storage product photos).
+
+REMAINING (smaller, next):
+- Product enhancements: multiple images + variants editor (admin form is single
+  primary image, no variant editing yet).
+- **Deploy:** push env vars to Vercel (NEXT_PUBLIC_SUPABASE_URL/ANON_KEY,
+  SUPABASE_SERVICE_ROLE_KEY, ADMIN_PASSWORD, ADMIN_JWT_SECRET). `SUPABASE_DB_URL`
+  is local-only (migration helper) — not needed in Vercel.
+- Set a strong `ADMIN_PASSWORD` for production (currently `Test1234`).
 
 ## Design system (`app/globals.css` @theme)
 
