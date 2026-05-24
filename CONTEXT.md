@@ -79,6 +79,12 @@ a finance engine. **Foundation is built; module CRUD is the next step.**
 
 ### Supabase provisioning (do this next — client/owner)
 
+> Project provisioned: ref **`wqrjdnsmnvyucrlasouk`**. Project-scoped MCP added
+> in `.mcp.json` (`supabase` server). Authenticate once via `claude /mcp` (real
+> terminal) → select `supabase` → Authenticate, then **restart Claude Code** so
+> the MCP loads (it's not active in the session where it was added). After that,
+> the migration can be applied via the MCP's `apply_migration`.
+
 1. Create a Supabase project (supabase.com). Copy Project URL + anon key +
    **service_role** key (Settings → API) into `.env.local` (and Vercel):
    `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`,
