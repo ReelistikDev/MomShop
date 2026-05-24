@@ -4,6 +4,8 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { getSupabaseAdmin } from "@/lib/supabase";
+import { isMailConfigured } from "@/lib/mailer";
+import { sendProductAnnouncement } from "@/lib/emails";
 
 function slugify(s: string) {
   return s.toLowerCase().trim().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "").slice(0, 50);
@@ -96,6 +98,51 @@ export async function deleteProduct(formData: FormData) {
   await db.from("products").delete().eq("id", id);
   revalidatePath("/admin/products");
   revalidatePath("/shop");
+}
+
+export async function announceProduct(formData: FormData) {
+  const db = getSupabaseAdmin();
+  const id = String(formData.get("id") || "");
+  if (!db || !id || !isMailConfigured()) return;
+
+  const { data: product } = await db
+    .from("products")
+    .select("name, slug, short_description, images")
+    .eq("id", id)
+    .single();
+  if (!product) return;
+
+  const { data: subs } = await db
+    .from("newsletter_subscribers")
+    .select("email, unsubscribe_token")
+    .eq("status", "confirmed");
+  const recipients = subs ?? [];
+
+  const { data: bc } = await db
+    .from("broadcasts")
+    .insert({
+      subject: `New in the shop: ${product.name}`,
+      body: `Product announcement: ${product.name}`,
+      status: "sending",
+      recipient_count: recipients.length,
+    })
+    .select("id")
+    .single();
+
+  const sent = await sendProductAnnouncement(product, recipients);
+
+  if (bc?.id) {
+    await db
+      .from("broadcasts")
+      .update({
+        status: sent > 0 || recipients.length === 0 ? "sent" : "failed",
+        sent_count: sent,
+        sent_at: new Date().toISOString(),
+      })
+      .eq("id", bc.id);
+  }
+  revalidatePath("/admin/products");
+  revalidatePath("/admin/broadcasts");
 }
 
 export async function quickToggle(formData: FormData) {

@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { getSupabase } from "@/lib/supabase";
+import { notifyAdminOfContact, sendContactAck } from "@/lib/emails";
 
 const EMAIL = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
 
@@ -29,6 +30,13 @@ export async function POST(req: Request) {
   } else {
     console.log("[contact] no database configured — message from:", email);
   }
+
+  // Fire the lifecycle emails (no-op if mail isn't configured; never blocks the
+  // response on a send failure since the message is already saved).
+  await Promise.allSettled([
+    sendContactAck(name, email),
+    notifyAdminOfContact({ name, email, subject, message }),
+  ]);
 
   return NextResponse.json({ ok: true });
 }

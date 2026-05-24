@@ -66,6 +66,7 @@ export async function sendMail(opts: {
   subject: string;
   html: string;
   text: string;
+  replyTo?: string;
   headers?: Record<string, string>;
 }) {
   const resend = client();
@@ -76,6 +77,7 @@ export async function sendMail(opts: {
     subject: opts.subject,
     html: opts.html,
     text: opts.text,
+    replyTo: opts.replyTo,
     headers: opts.headers,
   });
   if (error) throw new Error(error.message || "Resend send failed");

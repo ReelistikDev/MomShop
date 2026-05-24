@@ -167,6 +167,15 @@ routes/broadcasts code is transport-agnostic.
   `status / confirm_token / unsubscribe_token / confirmed_at / unsubscribed_at`;
   new `broadcasts` table. Apply a single migration with
   `node scripts/db-migrate.mjs 0002_newsletter.sql` (runner takes an optional file arg).
+- **Lifecycle emails** (`lib/emails.ts`, all no-op if mail unconfigured):
+  - **Welcome** — sent from the confirm route the first time a subscriber confirms.
+  - **Inquiry received** — contact form (`/api/contact`) sends the customer an
+    auto-reply AND notifies the owner at `ADMIN_EMAIL` (reply-to = customer).
+    `ADMIN_EMAIL` is optional; without it customers still get the auto-reply.
+  - **New-product announcement** — `/admin/products/edit/[id]` has an "Announce
+    to N subscribers" button (action `announceProduct`) that emails confirmed
+    subscribers a "new in the shop" email featuring that product. **Manual/
+    intentional** (not auto-on-create) so releases are deliberate; logged in `broadcasts`.
 - **Broadcasts:** `/admin/broadcasts` composes + sends to confirmed subscribers,
   each email carrying List-Unsubscribe (one-click) + an unsubscribe link. History
   logged in `broadcasts`. Sends sequentially in a server action — fine for a small
