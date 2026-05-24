@@ -29,7 +29,7 @@ const STEPS = [
   {
     n: "04",
     title: "Arrives ready to give",
-    body: "Wrapped with a handwritten note, ready to gift.",
+    body: "Packed with care and ready to give.",
   },
 ];
 

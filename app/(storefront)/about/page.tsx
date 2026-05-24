@@ -27,7 +27,7 @@ export default function AboutPage() {
           </p>
           <p className="mt-4 leading-relaxed text-stone">
             The shop is filling up with hats, earrings, shirts, stickers, and
-            more, made and gathered in small batches. {BRAND.location}.
+            more, all made or chosen by hand. {BRAND.location}.
           </p>
         </Container>
       </section>
@@ -36,8 +36,8 @@ export default function AboutPage() {
       <section className="bg-linen py-16 lg:py-24">
         <Container size="narrow" className="text-center">
           <p className="font-serif text-[1.7rem] leading-snug text-ink lg:text-[2.1rem]">
-            “I&apos;d rather make a few things carefully than a hundred quickly.
-            Every piece should feel like it was made for someone.”
+            “I want every piece to feel like it was made for someone —
+            considered, cared for, and worth keeping.”
           </p>
           <p className="mt-6 flex items-center justify-center gap-2 text-[0.8rem] font-semibold uppercase tracking-[0.18em] text-mist">
             The maker behind {BRAND.name}
@@ -53,15 +53,15 @@ export default function AboutPage() {
             {[
               {
                 title: "Made with care",
-                body: "Everything is made or hand-picked in small batches, checked over before it ever ships.",
+                body: "Everything is made or hand-picked with care, and checked over before it ever ships.",
               },
               {
-                title: "Small & personal",
-                body: "A one-person shop, so every order — and every custom request — gets real attention.",
+                title: "Personal service",
+                body: "Every order — and every custom or bulk request — gets real attention.",
               },
               {
                 title: "Made to be gifted",
-                body: "Orders arrive wrapped with a handwritten note, ready to give (or to keep).",
+                body: "Every order is packed with care, and you can add a gift note to send it straight to someone you love.",
               },
             ].map((v) => (
               <div key={v.title} className="border-t border-line pt-6">

@@ -19,17 +19,17 @@ const VALUES = [
   {
     Icon: HandIcon,
     title: "Made by hand",
-    body: "Everything is made or hand-picked in small batches — chosen with care, never mass-produced.",
+    body: "Everything is made or hand-picked with care — never mass-produced.",
   },
   {
     Icon: LeafIcon,
-    title: "Small batches",
-    body: "New pieces arrive a few at a time, so each one gets the attention it deserves.",
+    title: "Made to last",
+    body: "Quality materials and a careful finish, made to hold up to everyday life.",
   },
   {
     Icon: GiftIcon,
     title: "Ready to gift",
-    body: "Orders arrive wrapped with a handwritten note, ready to give.",
+    body: "Every order is packed with care — and you can add a gift note to any order.",
   },
 ];
 
@@ -47,8 +47,8 @@ export default async function HomePage() {
             <span className="italic text-sage-dark">made with love.</span>
           </h1>
           <p className="mt-6 max-w-xl text-lg leading-relaxed text-stone">
-            Hats, earrings, shirts, stickers, and more — handmade and gathered
-            in small batches. The shop is being stocked right now.
+            Hats, earrings, shirts, stickers, and more — handmade and chosen
+            with care. The shop is being stocked right now.
           </p>
           <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
             <Button href="/#newsletter" variant="primary" size="lg">
@@ -172,8 +172,8 @@ export default async function HomePage() {
             Made by hand, with love.
           </h2>
           <p className="mx-auto mt-5 max-w-md leading-relaxed text-cream/90">
-            A small shop run with a lot of heart. Everything is made or gathered
-            in small batches and packed to be gifted.
+            Run with a lot of heart — everything is made or chosen with care,
+            and ready to give or to keep.
           </p>
           <div className="mt-8">
             <Button

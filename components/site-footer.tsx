@@ -48,8 +48,8 @@ export function SiteFooter() {
               <span className="font-serif text-2xl">{BRAND.name}</span>
             </div>
             <p className="mt-4 text-[0.95rem] leading-relaxed text-stone">
-              {BRAND.description} Each piece is made by hand in small batches and
-              packed to be gifted.
+              {BRAND.description} Each piece is made or chosen by hand, with
+              care.
             </p>
             <div className="mt-6 flex items-center gap-3">
               {[

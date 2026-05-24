@@ -63,4 +63,6 @@ export interface CartItem {
   quantity: number;
   options?: Record<string, string>;
   engraving?: string;
+  /** Optional gift note to include with the order (+$2; folded into price). */
+  giftNote?: string;
 }

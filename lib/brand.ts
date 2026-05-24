@@ -9,7 +9,7 @@ export const BRAND = {
     "A little handmade boutique — hats, earrings, shirts, stickers, and more, made and gathered with love.",
   email: "hello@willowandwren.com",
   phone: "(555) 014-2278",
-  location: "Handmade in small batches · Asheville, NC",
+  location: "Handmade with care · Asheville, NC",
   socials: {
     instagram: "https://instagram.com",
     pinterest: "https://pinterest.com",

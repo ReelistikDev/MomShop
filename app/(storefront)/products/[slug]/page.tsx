@@ -34,9 +34,9 @@ export async function generateMetadata({
 }
 
 const TRUST = [
-  { Icon: GiftIcon, label: "Arrives gift-ready in a linen pouch" },
-  { Icon: FeatherIcon, label: "Lightweight & comfortable to wear daily" },
-  { Icon: LeafIcon, label: "Handmade to order in small batches" },
+  { Icon: GiftIcon, label: "Thoughtfully packed, ready to give" },
+  { Icon: FeatherIcon, label: "Made or hand-picked with care" },
+  { Icon: LeafIcon, label: "Handmade to order" },
 ];
 
 export default async function ProductPage({

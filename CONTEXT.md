@@ -176,6 +176,18 @@ routes/broadcasts code is transport-agnostic.
   Vercel. Verified the flow locally without a key (opt-in/confirm/unsubscribe +
   admin views all work; actual delivery untested until the key exists).
 
+## Copy rules + gift note
+
+- **Copy must NOT imply low quantity / limited capacity** (no "small batches",
+  "a few at a time", "one-person shop", etc.) — it scares off big/bulk orders.
+  Keep craft language ("made by hand / with care") without quantity claims.
+- **Don't promise specific packaging** ("arrives in a linen pouch", "wrapped
+  with a handwritten note"). Generic "packed with care / ready to give" is fine.
+- **Gift note ("Send a note"):** the product page (`AddToCart`) has an optional
+  gift-note textarea. A non-empty note adds **$2** (`GIFT_NOTE_PRICE` in
+  `add-to-cart.tsx`) folded into the line price, stored on `CartItem.giftNote`
+  (part of the cart key), shown in the cart drawer. No "handwritten" promise.
+
 ## Design system (`app/globals.css` @theme)
 
 - **Type:** `Fraunces` (serif headings), `Hanken Grotesk` (sans body),
