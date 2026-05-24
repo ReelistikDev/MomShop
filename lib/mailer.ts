@@ -1,32 +1,23 @@
-import nodemailer, { type Transporter } from "nodemailer";
+import { Resend } from "resend";
 import { BRAND } from "./brand";
 
-let cached: Transporter | null = null;
+let cached: Resend | null = null;
 
-/** True when SMTP creds are present (your own mailbox). */
+/** True when a Resend API key is present. */
 export function isMailConfigured(): boolean {
-  return Boolean(
-    process.env.SMTP_HOST && process.env.SMTP_USER && process.env.SMTP_PASS
-  );
+  return Boolean(process.env.RESEND_API_KEY);
 }
 
-export function getMailer(): Transporter | null {
-  if (!isMailConfigured()) return null;
-  if (!cached) {
-    const port = Number(process.env.SMTP_PORT || 587);
-    cached = nodemailer.createTransport({
-      host: process.env.SMTP_HOST,
-      port,
-      secure: port === 465, // 465 = implicit TLS; 587 = STARTTLS
-      auth: { user: process.env.SMTP_USER, pass: process.env.SMTP_PASS },
-    });
-  }
+function client(): Resend | null {
+  if (!process.env.RESEND_API_KEY) return null;
+  if (!cached) cached = new Resend(process.env.RESEND_API_KEY);
   return cached;
 }
 
 export function mailFrom(): string {
-  const addr = process.env.MAIL_FROM || process.env.SMTP_USER || "";
-  // Friendly "Brand <addr>" form when only a bare address is given.
+  // Must be a verified-domain sender in your Resend account. `onboarding@resend.dev`
+  // works for testing but only delivers to your own account email.
+  const addr = process.env.MAIL_FROM || "onboarding@resend.dev";
   return addr.includes("<") ? addr : `${BRAND.name} <${addr}>`;
 }
 
@@ -77,9 +68,9 @@ export async function sendMail(opts: {
   text: string;
   headers?: Record<string, string>;
 }) {
-  const t = getMailer();
-  if (!t) throw new Error("Mail is not configured");
-  return t.sendMail({
+  const resend = client();
+  if (!resend) throw new Error("Mail is not configured (RESEND_API_KEY missing)");
+  const { data, error } = await resend.emails.send({
     from: mailFrom(),
     to: opts.to,
     subject: opts.subject,
@@ -87,4 +78,6 @@ export async function sendMail(opts: {
     text: opts.text,
     headers: opts.headers,
   });
+  if (error) throw new Error(error.message || "Resend send failed");
+  return data;
 }

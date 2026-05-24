@@ -51,11 +51,8 @@ export default async function AdminBroadcastsPage() {
 
       {!mailOk && (
         <div className="mb-6 rounded-card border border-dashed border-oak/50 bg-shell px-5 py-4 text-[0.92rem] text-stone">
-          Email sending isn&apos;t configured yet. Add your mailbox SMTP settings
-          (<code className="rounded bg-linen px-1.5 py-0.5 font-mono text-[0.8rem]">SMTP_HOST</code>,{" "}
-          <code className="rounded bg-linen px-1.5 py-0.5 font-mono text-[0.8rem]">SMTP_PORT</code>,{" "}
-          <code className="rounded bg-linen px-1.5 py-0.5 font-mono text-[0.8rem]">SMTP_USER</code>,{" "}
-          <code className="rounded bg-linen px-1.5 py-0.5 font-mono text-[0.8rem]">SMTP_PASS</code>,{" "}
+          Email sending isn&apos;t configured yet. Add your Resend settings
+          (<code className="rounded bg-linen px-1.5 py-0.5 font-mono text-[0.8rem]">RESEND_API_KEY</code>,{" "}
           <code className="rounded bg-linen px-1.5 py-0.5 font-mono text-[0.8rem]">MAIL_FROM</code>,{" "}
           <code className="rounded bg-linen px-1.5 py-0.5 font-mono text-[0.8rem]">APP_URL</code>) to{" "}
           <code className="rounded bg-linen px-1.5 py-0.5 font-mono text-[0.8rem]">.env.local</code> and Vercel.
