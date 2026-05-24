@@ -53,6 +53,54 @@ Repo: `ReelistikDev/MomShop` · clone `C:\Users\gavin\repos\MomShop`. Pushing to
 - Cart (localStorage) + slide-out drawer still wired (no items yet).
 - Newsletter + Contact API routes write to Supabase when env present, else no-op.
 
+## Admin dashboard (`/admin`)
+
+Private studio dashboard so the client manages the catalog + sees signups, plus
+a finance engine. **Foundation is built; module CRUD is the next step.**
+
+- **Auth = single password → jose JWT** (like PopsShop). `ADMIN_PASSWORD` +
+  `ADMIN_JWT_SECRET` are server-only env vars. Login route compares server-side,
+  signs a JWT, sets an **httpOnly** `ww_admin` cookie; `proxy.ts` (Next 16's
+  renamed middleware) verifies it on `/admin/*` and redirects to `/admin/login`.
+  Verified: unauthed→307, wrong pw→401, right pw→200+cookie, authed→dashboard.
+- **Layout split via route groups:** root `app/layout.tsx` is slim (html/fonts);
+  `app/(storefront)/layout.tsx` has the shop chrome (header/footer/cart);
+  `app/admin/(panel)/layout.tsx` is the dashboard shell (sidebar nav). Login
+  lives at `app/admin/login/` (outside the panel group, no shell). Route groups
+  don't change URLs.
+- **Modules (nav):** Dashboard, Products, Categories, Finances, Subscribers,
+  Messages. Right now each is a **gated stub**: shows live data when the DB is
+  connected (`isDatabaseConfigured()`), else a `ConnectNotice`. Dashboard already
+  runs live count/net queries when connected.
+- Server uses **`getSupabaseAdmin()`** (service role, bypasses RLS) for admin
+  reads/writes — never exposed to client. Public still uses `getSupabase()` (anon).
+- `.env.local` (gitignored) currently has TEST admin creds (`momtest123`) and no
+  Supabase, so the admin shows the connect state. Replace for real use.
+
+### Supabase provisioning (do this next — client/owner)
+
+1. Create a Supabase project (supabase.com). Copy Project URL + anon key +
+   **service_role** key (Settings → API) into `.env.local` (and Vercel):
+   `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`,
+   `SUPABASE_SERVICE_ROLE_KEY`, plus `ADMIN_PASSWORD`, `ADMIN_JWT_SECRET`.
+2. Run `supabase/migrations/0001_init.sql` in the SQL editor (categories,
+   products, finance_transactions, newsletter_subscribers, contact_messages,
+   RLS). `seed.sql` is intentionally empty.
+3. Create Storage buckets: `media` (public — product images) and `receipts`
+   (private — finance receipts, served via signed URLs).
+4. Restart. The admin modules light up; build out CRUD + finance charts + upload.
+
+### Admin module build — remaining (next session)
+
+- Products CRUD (form + image upload to `media`), Categories CRUD, Subscribers
+  list + CSV export, Messages inbox (read/mark-read), Finances (income/expense
+  entries, income-vs-expense donut + category breakdown via hand-rolled SVG,
+  P&L by date range, receipt upload to `receipts` auto-linked to an expense).
+- Point public `lib/data.ts` accessors at Supabase so products created in admin
+  show on the storefront (RLS already allows public reads of active rows).
+- Product detail template (`(storefront)/products/[slug]`) still uses the old
+  `material` field/breadcrumb — realign to `category` when wiring products.
+
 ## Design system (`app/globals.css` @theme)
 
 - **Type:** `Fraunces` (serif headings), `Hanken Grotesk` (sans body),
@@ -69,26 +117,31 @@ Repo: `ReelistikDev/MomShop` · clone `C:\Users\gavin\repos\MomShop`. Pushing to
 
 ```
 app/
-  layout.tsx            fonts (Fraunces/Hanken/Caveat) + metadata + providers
-  page.tsx              home — coming-soon landing (hero, coming-soon cards,
-                        values, custom card, twilight studio banner, newsletter)
-  shop/page.tsx         "Coming soon" — header + 8 ComingSoonCards (no products)
-  custom/page.tsx       custom orders (generalized; steps + what's-possible + CTA)
-  about/page.tsx        story + values + twilight banner (imageless)
-  contact/page.tsx      contact form + FAQ
-  products/[slug]/      product detail template (builds 0 pages while catalog empty)
-  api/newsletter/, api/contact/   route handlers (Supabase-or-noop)
+  layout.tsx            root: slim — html/fonts/metadata only
+  (storefront)/         public site (route group; URLs unchanged)
+    layout.tsx          shop chrome: CartProvider + header/footer/drawer
+    page.tsx shop/ custom/ about/ contact/ products/[slug]/
+  admin/
+    login/page.tsx      standalone login (no shell)
+    (panel)/            dashboard group
+      layout.tsx        sidebar shell (AdminNav)
+      page.tsx          dashboard (live counts/net when DB connected)
+      products/ categories/ finances/ newsletter/ messages/   gated stubs
+  api/
+    newsletter/ contact/        public form handlers (Supabase-or-noop)
+    admin/login/ admin/logout/  jose session set/clear
+proxy.ts                /admin guard (Next 16 renamed middleware)
 components/
-  site-header.tsx, site-footer.tsx
-  placeholders.tsx      ComingSoonCard (used) + PlaceholderPanel (spare, unused)
-  product-card.tsx, product-gallery.tsx, cart/*, ui/*, newsletter.tsx,
-  contact-form.tsx, icons.tsx (incl. HeartIcon, SprigIcon)
+  site-header.tsx, site-footer.tsx, placeholders.tsx, product-card.tsx,
+  product-gallery.tsx, cart/*, ui/*, newsletter.tsx, contact-form.tsx,
+  icons.tsx (HeartIcon, SprigIcon, admin icons)
+  admin/  admin-nav.tsx (client) · admin-ui.tsx (PageHeader/StatCard/ConnectNotice/ReadyPanel)
 lib/
-  brand.ts              brand name/contact/socials (placeholder identity)
-  data.ts               EMPTY catalog + async accessors (Supabase-shaped)
-  types.ts              Product / Material / CartItem (Material* unused for now)
-  supabase.ts, utils.ts
-supabase/migrations/0001_init.sql   generic catalog schema (materials + products)
+  brand.ts · data.ts (EMPTY catalog + accessors) · types.ts · utils.ts
+  supabase.ts (getSupabase anon + getSupabaseAdmin service-role + isDatabaseConfigured)
+  auth.ts (jose sign/verify + verifyPassword)
+supabase/migrations/0001_init.sql   full schema (categories, products,
+                                    finance_transactions, newsletter, contact, RLS)
 supabase/seed.sql                   EMPTY (client adds categories/products)
 public/images/                      empty
 ```

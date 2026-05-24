@@ -96,6 +96,56 @@ export const HandIcon = (p: SVGProps<SVGSVGElement>) => (
   </Icon>
 );
 
+export const DashboardIcon = (p: SVGProps<SVGSVGElement>) => (
+  <Icon {...p}>
+    <rect x="4" y="4" width="7" height="7" rx="1.5" />
+    <rect x="13" y="4" width="7" height="7" rx="1.5" />
+    <rect x="4" y="13" width="7" height="7" rx="1.5" />
+    <rect x="13" y="13" width="7" height="7" rx="1.5" />
+  </Icon>
+);
+
+export const TagIcon = (p: SVGProps<SVGSVGElement>) => (
+  <Icon {...p}>
+    <path d="M4 12.5V5a1 1 0 0 1 1-1h7.5a1 1 0 0 1 .7.3l6 6a1 1 0 0 1 0 1.4l-6.6 6.6a1 1 0 0 1-1.4 0l-6-6a1 1 0 0 1-.2-.3Z" />
+    <circle cx="8.5" cy="8.5" r="1.1" fill="currentColor" stroke="none" />
+  </Icon>
+);
+
+export const LayersIcon = (p: SVGProps<SVGSVGElement>) => (
+  <Icon {...p}>
+    <path d="M12 3 21 8l-9 5-9-5 9-5Z" />
+    <path d="M3 13l9 5 9-5" />
+  </Icon>
+);
+
+export const ChartIcon = (p: SVGProps<SVGSVGElement>) => (
+  <Icon {...p}>
+    <path d="M12 3a9 9 0 1 0 9 9h-9V3Z" />
+    <path d="M14 3.5A9 9 0 0 1 20.5 10H14V3.5Z" />
+  </Icon>
+);
+
+export const MailIcon = (p: SVGProps<SVGSVGElement>) => (
+  <Icon {...p}>
+    <rect x="3" y="5" width="18" height="14" rx="2" />
+    <path d="m4 7 8 6 8-6" />
+  </Icon>
+);
+
+export const MessageIcon = (p: SVGProps<SVGSVGElement>) => (
+  <Icon {...p}>
+    <path d="M5 5h14a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H9l-4 3.5V6a1 1 0 0 1 1-1Z" />
+  </Icon>
+);
+
+export const LogoutIcon = (p: SVGProps<SVGSVGElement>) => (
+  <Icon {...p}>
+    <path d="M14 4h4a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1h-4" />
+    <path d="M10 12h9M16 8l4 4-4 4" />
+  </Icon>
+);
+
 export const HeartIcon = (p: SVGProps<SVGSVGElement>) => (
   <svg
     viewBox="0 0 24 24"

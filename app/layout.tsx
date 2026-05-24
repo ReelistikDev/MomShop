@@ -1,10 +1,6 @@
 import type { Metadata } from "next";
 import { Fraunces, Hanken_Grotesk, Caveat } from "next/font/google";
 import "./globals.css";
-import { CartProvider } from "@/components/cart/cart-provider";
-import { CartDrawer } from "@/components/cart/cart-drawer";
-import { SiteHeader } from "@/components/site-header";
-import { SiteFooter } from "@/components/site-footer";
 import { BRAND } from "@/lib/brand";
 
 const fraunces = Fraunces({
@@ -44,21 +40,14 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+}: Readonly<{ children: React.ReactNode }>) {
   return (
     <html
       lang="en"
       className={`${fraunces.variable} ${hanken.variable} ${caveat.variable} h-full antialiased`}
     >
       <body className="flex min-h-full flex-col bg-cream text-ink">
-        <CartProvider>
-          <SiteHeader />
-          <main className="flex-1">{children}</main>
-          <SiteFooter />
-          <CartDrawer />
-        </CartProvider>
+        {children}
       </body>
     </html>
   );
