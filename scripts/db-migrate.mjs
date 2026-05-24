@@ -48,7 +48,11 @@ config.ssl = { rejectUnauthorized: false };
 config.connectionTimeoutMillis = 15000;
 
 const dir = join(process.cwd(), "supabase", "migrations");
-const files = readdirSync(dir).filter((f) => f.endsWith(".sql")).sort();
+// Optional arg = apply only that one file (e.g. "0002_newsletter.sql").
+const only = process.argv[2];
+const files = only
+  ? [only]
+  : readdirSync(dir).filter((f) => f.endsWith(".sql")).sort();
 
 const client = new Client(config);
 try {

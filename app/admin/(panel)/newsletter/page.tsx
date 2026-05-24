@@ -1,8 +1,22 @@
 import { PageHeader, ConnectNotice } from "@/components/admin/admin-ui";
 import { ExportCsv } from "@/components/admin/export-csv";
 import { getSupabaseAdmin, isDatabaseConfigured } from "@/lib/supabase";
+import { cn } from "@/lib/utils";
 
 export const dynamic = "force-dynamic";
+
+interface Subscriber {
+  email: string;
+  status: string;
+  created_at: string;
+  [key: string]: string;
+}
+
+const STATUS_STYLES: Record<string, string> = {
+  confirmed: "bg-sage/15 text-sage-dark",
+  pending: "bg-oak/20 text-oak-dark",
+  unsubscribed: "bg-linen text-mist",
+};
 
 export default async function AdminNewsletterPage() {
   if (!isDatabaseConfigured()) {
@@ -17,19 +31,26 @@ export default async function AdminNewsletterPage() {
   const db = getSupabaseAdmin()!;
   const { data } = await db
     .from("newsletter_subscribers")
-    .select("email, created_at")
+    .select("email, status, created_at")
     .order("created_at", { ascending: false });
-  const rows = data ?? [];
+  const rows = (data ?? []) as Subscriber[];
+  const confirmed = rows.filter((r) => r.status === "confirmed").length;
+  const pending = rows.filter((r) => r.status === "pending").length;
+  const unsubscribed = rows.filter((r) => r.status === "unsubscribed").length;
 
   return (
     <>
       <PageHeader
         title="Subscribers"
-        description={`${rows.length} ${rows.length === 1 ? "person has" : "people have"} signed up.`}
+        description={
+          rows.length === 0
+            ? "Everyone who's signed up to hear when the shop opens."
+            : `${confirmed} confirmed · ${pending} pending · ${unsubscribed} unsubscribed`
+        }
         action={
           <ExportCsv
             rows={rows}
-            columns={["email", "created_at"]}
+            columns={["email", "status", "created_at"]}
             filename="willow-and-wren-subscribers.csv"
           />
         }
@@ -45,6 +66,7 @@ export default async function AdminNewsletterPage() {
             <thead className="bg-shell text-[0.72rem] uppercase tracking-[0.14em] text-mist">
               <tr>
                 <th className="px-5 py-3 font-semibold">Email</th>
+                <th className="px-5 py-3 font-semibold">Status</th>
                 <th className="px-5 py-3 font-semibold">Joined</th>
               </tr>
             </thead>
@@ -52,6 +74,16 @@ export default async function AdminNewsletterPage() {
               {rows.map((r) => (
                 <tr key={r.email} className="border-t border-line">
                   <td className="px-5 py-3 text-ink">{r.email}</td>
+                  <td className="px-5 py-3">
+                    <span
+                      className={cn(
+                        "inline-flex items-center rounded-full px-2.5 py-1 text-[0.7rem] font-semibold capitalize",
+                        STATUS_STYLES[r.status] ?? "bg-linen text-stone"
+                      )}
+                    >
+                      {r.status}
+                    </span>
+                  </td>
                   <td className="px-5 py-3 text-stone">
                     {new Date(r.created_at).toLocaleDateString("en-US", {
                       year: "numeric",

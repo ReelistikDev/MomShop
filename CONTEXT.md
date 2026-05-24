@@ -151,6 +151,30 @@ REMAINING (smaller, next):
 - Product enhancements: multiple images + variants editor (admin form is single
   primary image, no variant editing yet).
 
+## Subscribe engine (self-hosted, no third-party vendor)
+
+Email is collected, confirmed, and broadcast entirely in-house; the only
+external hop is **your own mailbox via SMTP** (Nodemailer in `lib/mailer.ts`).
+
+- **Double opt-in:** `/api/newsletter` (now uses the service role) creates a
+  `pending` subscriber + sends a confirmation email; `/api/newsletter/confirm`
+  flips to `confirmed`; `/api/newsletter/unsubscribe` (GET link + POST one-click)
+  flips to `unsubscribed`. Landing pages: `(storefront)/newsletter/confirmed` +
+  `/unsubscribed`. **If SMTP isn't configured, signups auto-confirm** (no email).
+- **Schema (migration 0002):** `newsletter_subscribers` gained
+  `status / confirm_token / unsubscribe_token / confirmed_at / unsubscribed_at`;
+  new `broadcasts` table. Apply a single migration with
+  `node scripts/db-migrate.mjs 0002_newsletter.sql` (runner takes an optional file arg).
+- **Broadcasts:** `/admin/broadcasts` composes + sends to confirmed subscribers,
+  each email carrying List-Unsubscribe (one-click) + an unsubscribe link. History
+  logged in `broadcasts`. Sends sequentially in a server action — fine for a small
+  list; revisit batching/queue for large lists (Vercel function timeout).
+- **To enable sending:** set `SMTP_HOST/SMTP_PORT/SMTP_USER/SMTP_PASS`, `MAIL_FROM`,
+  and `APP_URL` (absolute site URL for email links) in `.env.local` AND Vercel.
+  Gmail/Workspace needs an App Password. Verified locally without SMTP (opt-in
+  flow, confirm/unsubscribe, admin views all work; actual delivery untested until
+  creds exist).
+
 ## Design system (`app/globals.css` @theme)
 
 - **Type:** `Fraunces` (serif headings), `Hanken Grotesk` (sans body),

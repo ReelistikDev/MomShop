@@ -10,6 +10,7 @@ export function NewsletterForm({ className }: { className?: string }) {
   const [status, setStatus] = useState<"idle" | "loading" | "done" | "error">(
     "idle"
   );
+  const [confirmed, setConfirmed] = useState(true);
 
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -22,6 +23,8 @@ export function NewsletterForm({ className }: { className?: string }) {
         body: JSON.stringify({ email }),
       });
       if (!res.ok) throw new Error();
+      const data = await res.json().catch(() => ({ confirmed: true }));
+      setConfirmed(data.confirmed !== false);
       setStatus("done");
       setEmail("");
     } catch {
@@ -39,7 +42,9 @@ export function NewsletterForm({ className }: { className?: string }) {
       >
         <CheckIcon className="shrink-0" />
         <span className="text-[0.95rem]">
-          You&apos;re on the list — welcome. We&apos;ll be in touch softly.
+          {confirmed
+            ? "You're on the list — welcome. We'll be in touch softly."
+            : "Almost there — check your inbox to confirm your subscription."}
         </span>
       </div>
     );

@@ -10,6 +10,7 @@ import {
   LogoutIcon,
   MailIcon,
   MessageIcon,
+  SendIcon,
   TagIcon,
 } from "@/components/icons";
 
@@ -19,6 +20,7 @@ const LINKS = [
   { href: "/admin/categories", label: "Categories", Icon: LayersIcon },
   { href: "/admin/finances", label: "Finances", Icon: ChartIcon },
   { href: "/admin/newsletter", label: "Subscribers", Icon: MailIcon },
+  { href: "/admin/broadcasts", label: "Broadcasts", Icon: SendIcon },
   { href: "/admin/messages", label: "Messages", Icon: MessageIcon },
 ];
 

@@ -139,6 +139,13 @@ export const MessageIcon = (p: SVGProps<SVGSVGElement>) => (
   </Icon>
 );
 
+export const SendIcon = (p: SVGProps<SVGSVGElement>) => (
+  <Icon {...p}>
+    <path d="M21 4 3 11l6 2.5L11 20l3.5-6L21 4Z" />
+    <path d="M9 13.5 21 4" />
+  </Icon>
+);
+
 export const LogoutIcon = (p: SVGProps<SVGSVGElement>) => (
   <Icon {...p}>
     <path d="M14 4h4a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1h-4" />
