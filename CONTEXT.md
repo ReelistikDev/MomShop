@@ -79,11 +79,17 @@ a finance engine. **Foundation is built; module CRUD is the next step.**
 
 ### Supabase provisioning (do this next — client/owner)
 
-> Project provisioned: ref **`wqrjdnsmnvyucrlasouk`**. Project-scoped MCP added
-> in `.mcp.json` (`supabase` server). Authenticate once via `claude /mcp` (real
-> terminal) → select `supabase` → Authenticate, then **restart Claude Code** so
-> the MCP loads (it's not active in the session where it was added). After that,
-> the migration can be applied via the MCP's `apply_migration`.
+> ✅ DONE. Project ref **`wqrjdnsmnvyucrlasouk`**. Schema applied (via
+> `node scripts/db-migrate.mjs`, which reads `.env.local`), Storage buckets
+> `media` (public) + `receipts` (private) created (`node scripts/setup-storage.mjs`),
+> runtime connection verified (dashboard shows live counts). `.mcp.json` has the
+> `supabase` MCP but it needs interactive `claude /mcp` auth + restart to use —
+> not required, since the scripts talk to the DB directly via `.env.local`.
+>
+> `.env.local` (gitignored, UTF-8) holds: NEXT_PUBLIC_SUPABASE_URL,
+> NEXT_PUBLIC_SUPABASE_ANON_KEY, SUPABASE_SERVICE_ROLE_KEY, SUPABASE_DB_URL
+> (DB password — used only by db-migrate), ADMIN_PASSWORD (still test `momtest123`
+> — CHANGE for prod), ADMIN_JWT_SECRET. To re-apply schema: `node scripts/db-migrate.mjs`.
 
 1. Create a Supabase project (supabase.com). Copy Project URL + anon key +
    **service_role** key (Settings → API) into `.env.local` (and Vercel):
@@ -96,16 +102,29 @@ a finance engine. **Foundation is built; module CRUD is the next step.**
    (private — finance receipts, served via signed URLs).
 4. Restart. The admin modules light up; build out CRUD + finance charts + upload.
 
-### Admin module build — remaining (next session)
+### Admin modules — status
 
-- Products CRUD (form + image upload to `media`), Categories CRUD, Subscribers
-  list + CSV export, Messages inbox (read/mark-read), Finances (income/expense
-  entries, income-vs-expense donut + category breakdown via hand-rolled SVG,
-  P&L by date range, receipt upload to `receipts` auto-linked to an expense).
-- Point public `lib/data.ts` accessors at Supabase so products created in admin
-  show on the storefront (RLS already allows public reads of active rows).
-- Product detail template (`(storefront)/products/[slug]`) still uses the old
-  `material` field/breadcrumb — realign to `category` when wiring products.
+BUILT + verified against the live DB this session:
+- **Categories** — full CRUD (add form, hide/show, delete). `categories/`.
+- **Products** — list + create + edit + delete + quick hide/show, with **image
+  upload to the `media` bucket** (server actions in `products/actions.ts`,
+  shared `components/admin/product-form.tsx`). Single primary image for now.
+- **Subscribers** — list + CSV export (client-side from loaded rows).
+- **Messages** — inbox, mark read/unread, delete, reply-by-email.
+- Server actions use `getSupabaseAdmin()` (service role) + `revalidatePath`.
+  Public newsletter/contact forms confirmed writing to Supabase (anon insert).
+
+REMAINING (next session):
+- **Finances** — still a ReadyPanel stub. Build: income/expense entries (CRUD),
+  income-vs-expense donut + category breakdown (hand-rolled SVG, no chart dep),
+  P&L by date range, receipt upload to `receipts` auto-linked to an expense.
+  Table `finance_transactions` already exists.
+- **Storefront wiring** — intentionally deferred (shop is "Coming soon" until
+  launch). When opening: point public `lib/data.ts` accessors at Supabase
+  (anon, active rows) and switch `/shop` + home grids from ComingSoonCard to
+  ProductCard; product detail (`(storefront)/products/[slug]`) still uses the
+  old `material` field/breadcrumb — realign to `category`.
+- Product enhancements later: multiple images, variants. Change ADMIN_PASSWORD.
 
 ## Design system (`app/globals.css` @theme)
 
