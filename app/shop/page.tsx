@@ -1,83 +1,48 @@
-import Link from "next/link";
 import type { Metadata } from "next";
 import { Container } from "@/components/ui/container";
-import { ProductCard } from "@/components/product-card";
-import { getMaterials, getProducts } from "@/lib/data";
-import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import { ComingSoonCard } from "@/components/placeholders";
+import { ArrowRightIcon, HeartIcon } from "@/components/icons";
 
 export const metadata: Metadata = {
-  title: "Shop earrings",
+  title: "Shop",
   description:
-    "Browse handmade wood and leather earrings — lightweight pairs designed for everyday wear.",
+    "The Willow & Wren shop is being stocked — hats, earrings, shirts, stickers, and more, coming soon.",
 };
 
-export default async function ShopPage({
-  searchParams,
-}: {
-  searchParams: Promise<{ material?: string }>;
-}) {
-  const { material } = await searchParams;
-  const active = material ?? "all";
-  const [products, materials] = await Promise.all([
-    getProducts(active),
-    getMaterials(),
-  ]);
-
-  const chips = [
-    { slug: "all", name: "All" },
-    ...materials.map((m) => ({ slug: m.slug, name: m.name })),
-  ];
-
+export default function ShopPage() {
   return (
     <>
       <section className="border-b border-line bg-linen/60">
-        <Container className="py-14 text-center lg:py-20">
+        <Container className="py-16 text-center lg:py-24">
           <span className="eyebrow">The shop</span>
-          <h1 className="text-h1 mt-3 text-balance">
-            Handmade earrings, light as can be
-          </h1>
+          <h1 className="text-h1 mt-3 text-balance">Our shelves are filling up</h1>
           <p className="mx-auto mt-4 max-w-xl leading-relaxed text-stone">
-            CNC-cut wood, soft leather, and a little of both — made in small
-            batches and ready to gift.
+            Hats, earrings, shirts, stickers, and more — all handmade and
+            gathered with care. The full shop opens soon.
           </p>
+          <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
+            <Button href="/#newsletter" variant="primary" size="lg">
+              Get notified
+              <ArrowRightIcon className="h-4 w-4" />
+            </Button>
+            <Button href="/custom" variant="outline" size="lg">
+              Request a custom piece
+            </Button>
+          </div>
         </Container>
       </section>
 
-      <Container className="py-12 lg:py-16">
-        {/* Material filter chips */}
-        <div className="mb-10 flex flex-wrap justify-center gap-2.5">
-          {chips.map((chip) => {
-            const isActive = active === chip.slug;
-            const href = chip.slug === "all" ? "/shop" : `/shop?material=${chip.slug}`;
-            return (
-              <Link
-                key={chip.slug}
-                href={href}
-                scroll={false}
-                className={cn(
-                  "rounded-full border px-5 py-2 text-sm transition-all duration-200",
-                  isActive
-                    ? "border-ink bg-ink text-cream"
-                    : "border-line-strong text-stone hover:border-oak hover:text-ink"
-                )}
-              >
-                {chip.name}
-              </Link>
-            );
-          })}
+      <Container className="py-14 lg:py-20">
+        <div className="grid grid-cols-2 gap-5 md:grid-cols-3 xl:grid-cols-4">
+          {Array.from({ length: 8 }).map((_, i) => (
+            <ComingSoonCard key={i} />
+          ))}
         </div>
-
-        {products.length > 0 ? (
-          <div className="grid grid-cols-2 gap-x-5 gap-y-12 md:grid-cols-3 xl:grid-cols-4">
-            {products.map((p, i) => (
-              <ProductCard key={p.id} product={p} priority={i < 4} />
-            ))}
-          </div>
-        ) : (
-          <p className="py-12 text-center text-stone">
-            New pairs are on the way — check back soon.
-          </p>
-        )}
+        <p className="mt-12 flex items-center justify-center gap-2 font-script text-2xl text-stone">
+          Worth the wait
+          <HeartIcon className="h-4 w-4 text-heart" />
+        </p>
       </Container>
     </>
   );

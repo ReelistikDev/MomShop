@@ -15,16 +15,20 @@ export const metadata: Metadata = {
 
 const FAQS = [
   {
+    q: "When does the shop open?",
+    a: "We're stocking the shelves now. Join the list and we'll let you know the moment new pieces go live.",
+  },
+  {
     q: "How long does an order take?",
-    a: "Most pairs ship within 3–5 business days. Custom pairs are made to order and take a little longer — we'll always confirm timing.",
+    a: "Most in-stock orders ship within 3–5 business days. Custom and made-to-order pieces take a little longer — we'll always confirm timing.",
   },
   {
     q: "Do you take returns?",
-    a: "Because earrings are personal, we accept returns on unworn, non-custom pairs within 14 days. Reach out and we'll make it easy.",
+    a: "We accept returns on unused, non-custom items within 14 days. Reach out and we'll make it easy.",
   },
   {
-    q: "How do I care for wood and leather earrings?",
-    a: "Keep them dry — avoid soaking, perfume, and lotion — and wipe gently with a soft cloth. Store flat and out of direct sun to keep the finish warm.",
+    q: "Can I request a custom piece?",
+    a: "Absolutely — a custom color, a personalized gift, or your own idea. Start on the Custom page or send a note here.",
   },
 ];
 

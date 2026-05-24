@@ -13,17 +13,15 @@ const COLUMNS = [
   {
     title: "Shop",
     links: [
-      { label: "All earrings", href: "/shop" },
-      { label: "Wood", href: "/shop?material=wood" },
-      { label: "Leather", href: "/shop?material=leather" },
-      { label: "Mixed", href: "/shop?material=mixed" },
+      { label: "Visit the shop", href: "/shop" },
+      { label: "Custom orders", href: "/custom" },
+      { label: "Get notified", href: "/#newsletter" },
     ],
   },
   {
     title: "The studio",
     links: [
       { label: "Our story", href: "/about" },
-      { label: "Custom orders", href: "/custom" },
       { label: "Contact", href: "/contact" },
     ],
   },
@@ -31,7 +29,6 @@ const COLUMNS = [
     title: "Help",
     links: [
       { label: "Shipping & returns", href: "/contact" },
-      { label: "Earring care", href: "/about" },
       { label: "Custom requests", href: "/custom" },
       { label: `Email us`, href: `mailto:${BRAND.email}` },
     ],

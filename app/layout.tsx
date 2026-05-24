@@ -29,15 +29,15 @@ const caveat = Caveat({
 export const metadata: Metadata = {
   metadataBase: new URL("https://momshop.example"),
   title: {
-    default: `${BRAND.name} — Handmade Boutique Jewelry & Personalized Gifts`,
+    default: `${BRAND.name} — A Handmade Boutique`,
     template: `%s · ${BRAND.name}`,
   },
   description:
-    "Lightweight, handmade jewelry and personalized gifts, designed for everyday wear. Made in small batches with care.",
+    "A little handmade boutique — hats, earrings, shirts, stickers, and more, made and gathered with love. New shop opening soon.",
   openGraph: {
-    title: `${BRAND.name} — Handmade Boutique Jewelry`,
+    title: `${BRAND.name} — A Handmade Boutique`,
     description:
-      "Lightweight, handmade jewelry and personalized gifts, designed for everyday wear.",
+      "A little handmade boutique — hats, earrings, shirts, stickers, and more, made with love.",
     type: "website",
   },
 };

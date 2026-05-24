@@ -40,7 +40,7 @@ export function SiteHeader() {
           <p className="flex items-center justify-center gap-2.5 py-2 text-center text-[0.72rem] font-medium uppercase tracking-[0.16em]">
             <span>Handmade with love</span>
             <HeartIcon className="h-3 w-3 text-heart" />
-            <span className="hidden sm:inline">Free U.S. shipping over $50</span>
+            <span className="hidden sm:inline">New shop opening soon</span>
           </p>
         </Container>
       </div>

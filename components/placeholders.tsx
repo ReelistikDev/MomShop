@@ -15,7 +15,7 @@ export function ComingSoonCard({ className }: { className?: string }) {
         Coming soon
       </span>
       <span className="text-[0.68rem] font-semibold uppercase tracking-[0.18em] text-mist">
-        New pair on the way
+        New piece on the way
       </span>
     </div>
   );
