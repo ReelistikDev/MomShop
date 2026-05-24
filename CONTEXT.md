@@ -129,13 +129,27 @@ BUILT + verified against the live DB this session:
   automatically as products are added in the admin.
 - `next.config.ts` allows `*.supabase.co` images (Storage product photos).
 
+### Deployment (Vercel)
+
+- **Deployed.** Vercel project `momshop` (team `reelistikdevs-projects`,
+  projectId `prj_oz2OMazHMqIM8nln8AEYiMnWgy0c`), linked + GitHub-connected
+  (pushes to `main` auto-deploy). Latest prod build succeeded.
+- Env vars set on Vercel for **Production + Development** (NEXT_PUBLIC_SUPABASE_URL,
+  NEXT_PUBLIC_SUPABASE_ANON_KEY, SUPABASE_SERVICE_ROLE_KEY, ADMIN_PASSWORD,
+  ADMIN_JWT_SECRET). **Preview env NOT set** (branch/PR previews would lack keys —
+  add later if needed). `SUPABASE_DB_URL` is intentionally NOT on Vercel.
+- ⚠️ **Deployment Protection is ON** → all routes 401 with a Vercel auth wall
+  (same as PopsShop). To make public: Vercel dashboard → momshop → Settings →
+  Deployment Protection → set Vercel Authentication to Disabled (or preview-only)
+  → Save. (Owner can still preview while logged into Vercel.) Could also be done
+  via API `PATCH /v9/projects/{id}` `{"ssoProtection":null}` with a token.
+- Prod URL: `momshop-reelistikdevs-projects.vercel.app` (public once protection off).
+
 REMAINING (smaller, next):
+- Turn off Deployment Protection (above) to go public.
+- Set a strong `ADMIN_PASSWORD` for prod (currently `Test1234`); update on Vercel.
 - Product enhancements: multiple images + variants editor (admin form is single
   primary image, no variant editing yet).
-- **Deploy:** push env vars to Vercel (NEXT_PUBLIC_SUPABASE_URL/ANON_KEY,
-  SUPABASE_SERVICE_ROLE_KEY, ADMIN_PASSWORD, ADMIN_JWT_SECRET). `SUPABASE_DB_URL`
-  is local-only (migration helper) — not needed in Vercel.
-- Set a strong `ADMIN_PASSWORD` for production (currently `Test1234`).
 
 ## Design system (`app/globals.css` @theme)
 
