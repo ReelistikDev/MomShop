@@ -3,11 +3,11 @@
  * details) in this one file to rebrand the entire site.
  */
 export const BRAND = {
-  name: "Willow & Wren",
+  name: "The Myrtle Turtle",
   tagline: "Handmade with love",
   description:
     "A handmade boutique — hats, earrings, shirts, stickers, and more, made and gathered with love.",
-  email: "hello@willowandwren.com",
+  email: "hello@themyrtleturtle.com",
   phone: "(555) 014-2278",
   location: "Handmade with care · Asheville, NC",
   socials: {

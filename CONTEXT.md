@@ -14,8 +14,8 @@ Vibe: warm, natural, **"quietly premium"** boutique-artisan — cozy and
 handcrafted ("Handmade with love" w/ a clay heart + handwritten script +
 botanical sprigs), NOT flashy/corporate/luxury-black/pink-glitter/boho-overload.
 
-Display brand name is a **placeholder, "Willow & Wren"** — change `lib/brand.ts`
-in one place to rebrand. Still need her real shop name.
+Display brand name is **"The Myrtle Turtle"** — change `lib/brand.ts`
+in one place to rebrand.
 
 > History: started as a general jewelry boutique → pivoted to earrings-only
 > (CNC wood + leather, then hand-painted scenic wood) → **rebranded back to a
@@ -310,7 +310,8 @@ public/images/                      empty
 
 1. **Client fills the catalog** — categories + products + real photos. Today
    everything is Coming-soon by design.
-2. **Real shop name** — replace placeholder "Willow & Wren" in `lib/brand.ts`.
+2. **Contact details** — `lib/brand.ts` still has placeholder email/phone and
+   an Asheville, NC location (business is in SC); update to real values.
 3. **Supabase** — provision a project; when wiring, consider renaming
    `materials`→`categories` (+ `products.material`→`category`, drop `style`) to
    fit the general-boutique model, then point `lib/data.ts` accessors at the DB

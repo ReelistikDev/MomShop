@@ -7,13 +7,13 @@ import { ProductCard } from "@/components/product-card";
 import { ArrowRightIcon, HeartIcon } from "@/components/icons";
 import { getCategories, getProducts } from "@/lib/data";
 import { cn } from "@/lib/utils";
+import { BRAND } from "@/lib/brand";
 
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "Shop",
-  description:
-    "Shop handmade hats, earrings, shirts, stickers, and more — now open at Willow & Wren.",
+  description: `Shop handmade hats, earrings, shirts, stickers, and more — now open at ${BRAND.name}.`,
 };
 
 function HeaderBand() {
