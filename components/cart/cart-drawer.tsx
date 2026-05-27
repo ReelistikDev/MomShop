@@ -104,12 +104,6 @@ export function CartDrawer() {
                           “{item.engraving}”
                         </p>
                       )}
-                      {item.giftNote && (
-                        <p className="mt-0.5 text-[0.8rem] text-mist">
-                          <span className="text-sage-dark">Gift note (+$2):</span>{" "}
-                          <span className="italic">“{item.giftNote}”</span>
-                        </p>
-                      )}
                       <div className="mt-auto flex items-center justify-between pt-2">
                         <div className="flex items-center rounded-full border border-line-strong">
                           <button

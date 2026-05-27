@@ -7,7 +7,7 @@ import {
   getSquareLocationId,
   isSquareConfigured,
 } from "@/lib/square";
-import { GIFT_NOTE_PRICE, TAX_STATE, computeOrderTotals } from "@/lib/pricing";
+import { TAX_STATE, computeOrderTotals } from "@/lib/pricing";
 import { BRAND } from "@/lib/brand";
 
 const cents = (usd: number) => BigInt(Math.round(usd * 100));
@@ -17,7 +17,6 @@ const EMAIL = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
 type IncomingItem = {
   productId?: unknown;
   quantity?: unknown;
-  giftNote?: unknown;
   engraving?: unknown;
   options?: unknown;
 };
@@ -64,7 +63,6 @@ export async function POST(req: Request) {
   const requested = items.map((it) => ({
     productId: str(it.productId),
     quantity: Math.floor(Number(it.quantity)),
-    giftNote: str(it.giftNote),
     engraving: str(it.engraving),
     options:
       it.options && typeof it.options === "object" && !Array.isArray(it.options)
@@ -99,7 +97,6 @@ export async function POST(req: Request) {
     name: string;
     unitPrice: number;
     quantity: number;
-    giftNote: string;
     engraving: string;
     options: Record<string, unknown>;
   }[] = [];
@@ -124,13 +121,12 @@ export async function POST(req: Request) {
         { status: 409 }
       );
     }
-    const unitPrice = Number(product.price) + (line.giftNote ? GIFT_NOTE_PRICE : 0);
+    const unitPrice = Number(product.price);
     lines.push({
       productId: line.productId,
       name: product.name as string,
       unitPrice,
       quantity: line.quantity,
-      giftNote: line.giftNote,
       engraving: line.engraving,
       options: line.options,
     });
@@ -182,7 +178,6 @@ export async function POST(req: Request) {
       name: l.name,
       unit_price: l.unitPrice,
       quantity: l.quantity,
-      gift_note: l.giftNote || null,
       engraving: l.engraving || null,
       options: l.options,
     }))

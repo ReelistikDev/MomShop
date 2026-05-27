@@ -8,7 +8,6 @@ interface OrderItem {
   name: string;
   unit_price: number | string;
   quantity: number;
-  gift_note: string | null;
   engraving: string | null;
 }
 
@@ -70,7 +69,7 @@ export default async function AdminOrdersPage() {
   const { data } = await db
     .from("orders")
     .select(
-      "id, status, customer_name, customer_email, ship_line1, ship_line2, ship_city, ship_state, ship_postal, subtotal, shipping, tax, total, square_receipt_url, created_at, order_items(name, unit_price, quantity, gift_note, engraving)"
+      "id, status, customer_name, customer_email, ship_line1, ship_line2, ship_city, ship_state, ship_postal, subtotal, shipping, tax, total, square_receipt_url, created_at, order_items(name, unit_price, quantity, engraving)"
     )
     .order("created_at", { ascending: false });
 
@@ -148,7 +147,6 @@ export default async function AdminOrdersPage() {
                       {it.engraving && (
                         <span className="text-mist"> · “{it.engraving}”</span>
                       )}
-                      {it.gift_note && <span className="text-mist"> · gift note</span>}
                     </span>
                     <span className="tabular-nums text-stone">
                       {formatPrice(Number(it.unit_price) * it.quantity)}
