@@ -68,10 +68,16 @@ a finance engine. **Foundation is built; module CRUD is the next step.**
   `app/admin/(panel)/layout.tsx` is the dashboard shell (sidebar nav). Login
   lives at `app/admin/login/` (outside the panel group, no shell). Route groups
   don't change URLs.
-- **Modules (nav):** Dashboard, Products, Categories, Finances, Subscribers,
-  Messages. Right now each is a **gated stub**: shows live data when the DB is
-  connected (`isDatabaseConfigured()`), else a `ConnectNotice`. Dashboard already
-  runs live count/net queries when connected.
+- **Modules (nav):** Dashboard, Orders, Products, Categories, Finances,
+  Subscribers, Broadcasts, Messages. Each is gated on `isDatabaseConfigured()`
+  (live data when connected, else a `ConnectNotice`). Dashboard runs live
+  count/net queries (incl. a paid-orders count) when connected.
+- **Orders** (`/admin/orders`) — read-only list of checkout orders with status
+  badge (paid/pending/failed), customer + shipping, line items, subtotal/
+  shipping/tax/total, and a Square receipt link. Stat cards: paid count, paid
+  revenue, all-orders count. Fed by the `orders` + `order_items` tables via a
+  nested PostgREST select. Orders are created by `/api/checkout` and flipped to
+  `paid` by the Square webhook.
 - Server uses **`getSupabaseAdmin()`** (service role, bypasses RLS) for admin
   reads/writes — never exposed to client. Public still uses `getSupabase()` (anon).
 - `.env.local` (gitignored) currently has TEST admin creds (`momtest123`) and no
