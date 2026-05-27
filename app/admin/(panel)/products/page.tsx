@@ -17,6 +17,7 @@ interface Row {
   active: boolean;
   sold_out: boolean;
   featured: boolean;
+  stock: number | null;
 }
 
 export default async function AdminProductsPage() {
@@ -32,7 +33,7 @@ export default async function AdminProductsPage() {
   const db = getSupabaseAdmin()!;
   const { data } = await db
     .from("products")
-    .select("id, name, slug, category, price, images, active, sold_out, featured")
+    .select("id, name, slug, category, price, images, active, sold_out, featured, stock")
     .order("created_at", { ascending: false });
   const products = (data ?? []) as Row[];
 
@@ -81,6 +82,20 @@ export default async function AdminProductsPage() {
                       <Chip on={p.active} labelOn="Visible" labelOff="Hidden" />
                       {p.sold_out && <Chip on={false} labelOn="" labelOff="Sold out" />}
                       {p.featured && <Chip on labelOn="Featured" labelOff="" tone="oak" />}
+                      {p.stock !== null && (
+                        <span
+                          className={cn(
+                            "inline-flex items-center rounded-full px-2 py-0.5 text-[0.68rem] font-semibold",
+                            p.stock === 0
+                              ? "bg-heart/15 text-heart"
+                              : p.stock <= 5
+                                ? "bg-oak/20 text-oak-dark"
+                                : "bg-linen text-stone"
+                          )}
+                        >
+                          {p.stock} in stock
+                        </span>
+                      )}
                     </div>
                   </td>
                   <td className="px-4 py-3">

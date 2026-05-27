@@ -103,6 +103,11 @@ export default async function ProductPage({
           <p className="mt-3 text-2xl tabular-nums text-stone">
             {formatPrice(product.price)}
           </p>
+          {product.stock != null && product.stock > 0 && product.stock <= 5 && (
+            <p className="mt-2 text-[0.85rem] font-medium text-oak-dark">
+              Only {product.stock} left
+            </p>
+          )}
           <p className="mt-5 max-w-md text-[1.05rem] leading-relaxed text-stone">
             {product.description}
           </p>

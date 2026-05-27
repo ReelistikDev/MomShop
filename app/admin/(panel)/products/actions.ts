@@ -41,6 +41,7 @@ async function uploadImage(db: SupabaseClient, file: File): Promise<string | nul
 function parseFields(formData: FormData) {
   const name = String(formData.get("name") || "").trim();
   const badge = String(formData.get("badge") || "none");
+  const stockRaw = String(formData.get("stock") || "").trim();
   return {
     name,
     category: String(formData.get("category") || "") || null,
@@ -48,6 +49,8 @@ function parseFields(formData: FormData) {
     short_description: String(formData.get("short_description") || "").trim(),
     description: String(formData.get("description") || "").trim(),
     badge: badge === "none" ? null : badge,
+    // Blank = untracked (null); otherwise a non-negative integer.
+    stock: stockRaw === "" ? null : Math.max(0, Math.floor(Number(stockRaw)) || 0),
     sold_out: formData.get("sold_out") === "on",
     featured: formData.get("featured") === "on",
     active: formData.get("active") === "on",

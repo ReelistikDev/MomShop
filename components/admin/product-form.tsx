@@ -18,6 +18,7 @@ interface ProductLike {
   active?: boolean;
   sold_out?: boolean;
   featured?: boolean;
+  stock?: number | null;
 }
 
 const field =
@@ -65,6 +66,12 @@ export function ProductForm({
           <label className={label}>Price (USD)</label>
           <input name="price" type="number" step="0.01" min="0" defaultValue={p.price ?? ""} placeholder="0.00" className={cn(field, "mt-1.5")} />
         </div>
+      </div>
+
+      <div>
+        <label className={label}>Stock</label>
+        <input name="stock" type="number" min="0" step="1" defaultValue={p.stock ?? ""} placeholder="Leave blank for untracked" className={cn(field, "mt-1.5")} />
+        <p className="mt-1 text-[0.75rem] text-mist">Blank = not tracked. Set a number to count units — it drops as orders are paid and shows “Sold out” at 0.</p>
       </div>
 
       <div>
