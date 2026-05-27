@@ -5,8 +5,7 @@ import type { Product } from "@/lib/types";
 import { useCart } from "@/components/cart/cart-provider";
 import { ActionButton } from "@/components/ui/button";
 import { MinusIcon, PlusIcon } from "@/components/icons";
-import { cn, formatPrice } from "@/lib/utils";
-import { GIFT_NOTE_PRICE } from "@/lib/pricing";
+import { cn } from "@/lib/utils";
 
 export function AddToCart({ product }: { product: Product }) {
   const { add } = useCart();
@@ -15,11 +14,9 @@ export function AddToCart({ product }: { product: Product }) {
     Object.fromEntries(variants.map((v) => [v.name, v.options[0]]))
   );
   const [engraving, setEngraving] = useState("");
-  const [giftNote, setGiftNote] = useState("");
   const [quantity, setQuantity] = useState(1);
 
   const soldOut = Boolean(product.soldOut);
-  const note = giftNote.trim();
 
   function handleAdd() {
     if (soldOut) return;
@@ -27,11 +24,10 @@ export function AddToCart({ product }: { product: Product }) {
       productId: product.id,
       slug: product.slug,
       name: product.name,
-      price: product.price + (note ? GIFT_NOTE_PRICE : 0),
+      price: product.price,
       image: product.images[0] ?? "",
       options: variants.length > 0 ? options : undefined,
       engraving: engraving.trim() || undefined,
-      giftNote: note || undefined,
       quantity,
     });
   }
@@ -97,31 +93,6 @@ export function AddToCart({ product }: { product: Product }) {
           </p>
         </div>
       )}
-
-      {/* Send a note — optional gift note included with the order (+$2) */}
-      <div>
-        <div className="mb-2 flex items-center justify-between">
-          <span className="text-[0.82rem] font-semibold uppercase tracking-[0.14em] text-stone">
-            Send a note
-          </span>
-          <span className="text-[0.8rem] font-medium text-sage-dark">
-            +{formatPrice(GIFT_NOTE_PRICE)}
-          </span>
-        </div>
-        <textarea
-          rows={3}
-          maxLength={300}
-          value={giftNote}
-          onChange={(e) => setGiftNote(e.target.value)}
-          placeholder="Write a gift note to include with your order (optional)"
-          className="w-full rounded-xl border border-line-strong bg-cream px-4 py-3 text-ink placeholder:text-mist focus:border-oak focus:outline-none"
-        />
-        <p className="mt-1.5 text-[0.82rem] text-mist">
-          {note
-            ? `Your gift note will be included for ${formatPrice(GIFT_NOTE_PRICE)}.`
-            : `We'll include your gift note with the order for ${formatPrice(GIFT_NOTE_PRICE)}. Leave blank to skip.`}
-        </p>
-      </div>
 
       <div className="flex items-stretch gap-3">
         <div className="flex items-center rounded-full border border-line-strong px-1">

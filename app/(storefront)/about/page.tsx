@@ -61,7 +61,7 @@ export default function AboutPage() {
               },
               {
                 title: "Made to be gifted",
-                body: "Every order is packed with care, and you can add a gift note to send it straight to someone you love.",
+                body: "Every order is packed with care, ready to send straight to someone you love.",
               },
             ].map((v) => (
               <div key={v.title} className="border-t border-line pt-6">

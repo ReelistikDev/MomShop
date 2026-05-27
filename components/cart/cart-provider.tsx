@@ -34,7 +34,6 @@ function buildKey(input: AddInput) {
     input.productId,
     input.options ? JSON.stringify(input.options) : "",
     input.engraving ?? "",
-    input.giftNote ?? "",
   ].join("|");
 }
 

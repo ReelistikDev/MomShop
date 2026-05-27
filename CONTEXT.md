@@ -235,8 +235,8 @@ switched to hosted for lower PCI burden + built-in wallets.)
   Apply each with `node scripts/db-migrate.mjs <file>.sql`.
 - **`lib/square.ts`** — `getSquareClient()` (server-only, returns null until env
   set), `getSquareLocationId()`, `getAppUrl()`, `getSquareWebhookSignatureKey()`,
-  `isSquareConfigured()`. Uses the `square` npm SDK (v44). `GIFT_NOTE_PRICE` lives
-  in `lib/pricing.ts` (shared by client add-to-cart + server re-pricing).
+  `isSquareConfigured()`. Uses the `square` npm SDK (v44). Shipping/tax rules
+  live in `lib/pricing.ts` (shared by the checkout preview + server re-pricing).
 - **Env (add to `.env.local` + Vercel; see `.env.example`):**
   `SQUARE_ACCESS_TOKEN` (server secret), `SQUARE_ENVIRONMENT`
   (production|sandbox), `NEXT_PUBLIC_SQUARE_LOCATION_ID`,
@@ -249,17 +249,17 @@ switched to hosted for lower PCI burden + built-in wallets.)
   products). Verified locally: 503 when unconfigured, payment-link path builds,
   webhook rejects bad signatures (401) and is idempotent.
 
-## Copy rules + gift note
+## Copy rules
 
 - **Copy must NOT imply low quantity / limited capacity** (no "small batches",
-  "a few at a time", "one-person shop", etc.) — it scares off big/bulk orders.
-  Keep craft language ("made by hand / with care") without quantity claims.
+  "a few at a time", "one-person shop", "never mass-produced", etc.) — it scares
+  off big/bulk orders. Keep craft language ("made by hand / with care") without
+  quantity claims.
 - **Don't promise specific packaging** ("arrives in a linen pouch", "wrapped
   with a handwritten note"). Generic "packed with care / ready to give" is fine.
-- **Gift note ("Send a note"):** the product page (`AddToCart`) has an optional
-  gift-note textarea. A non-empty note adds **$2** (`GIFT_NOTE_PRICE` in
-  `add-to-cart.tsx`) folded into the line price, stored on `CartItem.giftNote`
-  (part of the cart key), shown in the cart drawer. No "handwritten" promise.
+- **No gift note.** The paid "Send a note" / gift-note feature was removed (the
+  `order_items.gift_note` column remains but is unused). Product personalization
+  ("engraving") is still supported.
 
 ## Design system (`app/globals.css` @theme)
 

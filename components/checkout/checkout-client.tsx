@@ -48,7 +48,6 @@ export function CheckoutClient() {
           items: items.map((i) => ({
             productId: i.productId,
             quantity: i.quantity,
-            giftNote: i.giftNote,
             engraving: i.engraving,
             options: i.options,
           })),

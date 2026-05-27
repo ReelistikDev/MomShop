@@ -29,7 +29,7 @@ const VALUES = [
   {
     Icon: GiftIcon,
     title: "Ready to gift",
-    body: "Every order is packed with care — and you can add a gift note to any order.",
+    body: "Every order is packed with care and ready to give.",
   },
 ];
 
