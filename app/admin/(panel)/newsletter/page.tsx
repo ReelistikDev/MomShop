@@ -51,7 +51,7 @@ export default async function AdminNewsletterPage() {
           <ExportCsv
             rows={rows}
             columns={["email", "status", "created_at"]}
-            filename="willow-and-wren-subscribers.csv"
+            filename="the-myrtle-turtle-subscribers.csv"
           />
         }
       />

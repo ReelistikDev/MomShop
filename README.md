@@ -4,8 +4,8 @@ A warm, natural, boutique-artisan storefront for **handmade wood & leather
 earrings** (CNC-cut, with made-to-order custom pieces). Built to feel
 **quietly premium** — calm, airy, and handcrafted, never flashy or corporate.
 
-Display brand is a **placeholder** (`Willow & Wren`). Change it in one place —
-`lib/brand.ts` — to rebrand the whole site.
+Display brand is **The Myrtle Turtle**, set in one place — `lib/brand.ts` —
+which drives the name, contact details, and metadata across the whole site.
 
 ## Stack
 
