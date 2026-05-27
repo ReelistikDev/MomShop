@@ -6,7 +6,7 @@ import type { Category, Product, ProductVariant } from "./types";
 
    Every accessor degrades gracefully: when `getSupabase()` is null (env not
    configured) or a query errors, we return empty arrays / undefined so the
-   build works without a database and the UI falls back to "Coming soon".
+   build works without a database and the UI falls back to placeholder cards.
 
    RLS allows public read of active rows only, but we still scope queries to
    `active = true` to be explicit and resilient to policy changes.
