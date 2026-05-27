@@ -19,7 +19,7 @@ const VALUES = [
   {
     Icon: HandIcon,
     title: "Made by hand",
-    body: "Everything is made or hand-picked with care — never mass-produced.",
+    body: "Everything is made or hand-picked with care, with an eye for the details.",
   },
   {
     Icon: LeafIcon,
