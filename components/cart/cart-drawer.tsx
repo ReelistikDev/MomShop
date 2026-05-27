@@ -2,7 +2,6 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
 import { useCart } from "@/components/cart/cart-provider";
 import { formatPrice, cn } from "@/lib/utils";
 import {
@@ -11,12 +10,11 @@ import {
   MinusIcon,
   PlusIcon,
 } from "@/components/icons";
-import { ActionButton } from "@/components/ui/button";
+import { Button } from "@/components/ui/button";
 
 export function CartDrawer() {
   const { items, isOpen, closeCart, updateQuantity, remove, subtotal, count } =
     useCart();
-  const [checkingOut, setCheckingOut] = useState(false);
 
   return (
     <div
@@ -162,23 +160,15 @@ export function CartDrawer() {
               <p className="mt-1 text-[0.8rem] text-mist">
                 Shipping and any personalization confirmed at checkout.
               </p>
-              <ActionButton
+              <Button
+                href="/checkout"
                 variant="primary"
                 size="lg"
                 className="mt-4 w-full"
-                onClick={() => setCheckingOut(true)}
+                onClick={closeCart}
               >
                 Checkout
-              </ActionButton>
-              {checkingOut && (
-                <p className="mt-3 rounded-lg bg-linen px-4 py-3 text-center text-[0.85rem] text-stone">
-                  Secure checkout is being set up. Reach us at{" "}
-                  <Link href="/contact" onClick={closeCart} className="underline">
-                    contact
-                  </Link>{" "}
-                  to place your order in the meantime.
-                </p>
-              )}
+              </Button>
             </footer>
           </>
         )}

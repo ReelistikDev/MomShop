@@ -6,8 +6,7 @@ import { useCart } from "@/components/cart/cart-provider";
 import { ActionButton } from "@/components/ui/button";
 import { MinusIcon, PlusIcon } from "@/components/icons";
 import { cn, formatPrice } from "@/lib/utils";
-
-export const GIFT_NOTE_PRICE = 2;
+import { GIFT_NOTE_PRICE } from "@/lib/pricing";
 
 export function AddToCart({ product }: { product: Product }) {
   const { add } = useCart();
