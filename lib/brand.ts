@@ -9,7 +9,7 @@ export const BRAND = {
     "A handmade boutique — hats, earrings, shirts, stickers, and more, made and gathered with love.",
   email: "hello@themyrtleturtle.com",
   phone: "(555) 014-2278",
-  location: "Handmade with care · Asheville, NC",
+  location: "Handmade with care · Myrtle Beach, SC",
   socials: {
     instagram: "https://instagram.com",
     pinterest: "https://pinterest.com",
