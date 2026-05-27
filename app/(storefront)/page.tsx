@@ -75,7 +75,7 @@ export default async function HomePage() {
               <SectionHeading
                 eyebrow="The shop"
                 title="New in the shop"
-                intro="Fresh from the studio — a few handmade pieces ready to find a home."
+                intro="Fresh from the studio — new handmade pieces ready to find a home."
                 align="center"
                 className="mx-auto"
               />
@@ -120,7 +120,7 @@ export default async function HomePage() {
           <SprigIcon className="mx-auto mb-4 h-7 w-7 text-sage" />
           <SectionHeading
             eyebrow="Handmade with care"
-            title="A small shop, run with heart"
+            title="A shop run with heart"
             align="center"
             className="mx-auto"
           />

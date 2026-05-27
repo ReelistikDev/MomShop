@@ -6,7 +6,7 @@ import { BRAND } from "@/lib/brand";
 
 export const metadata: Metadata = {
   title: "About",
-  description: `The story behind ${BRAND.name} — a little handmade boutique, made and gathered with love.`,
+  description: `The story behind ${BRAND.name} — a handmade boutique, made and gathered with love.`,
 };
 
 export default function AboutPage() {
@@ -18,10 +18,10 @@ export default function AboutPage() {
           <SprigIcon className="mx-auto mb-5 h-8 w-8 text-sage" />
           <span className="eyebrow">Our story</span>
           <h1 className="text-display mt-4 text-balance">
-            A little shop, <span className="italic text-sage-dark">made with love.</span>
+            A handmade boutique, <span className="italic text-sage-dark">made with love.</span>
           </h1>
           <p className="mt-6 text-lg leading-relaxed text-stone">
-            {BRAND.name} started as a small creative habit that grew into
+            {BRAND.name} started as a creative passion that grew into
             something to share — a place for handmade and hand-picked pieces
             made with care, not in a factory.
           </p>

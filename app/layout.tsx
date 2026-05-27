@@ -29,11 +29,11 @@ export const metadata: Metadata = {
     template: `%s · ${BRAND.name}`,
   },
   description:
-    "A little handmade boutique — hats, earrings, shirts, stickers, and more, made and gathered with love. New shop opening soon.",
+    "A handmade boutique — hats, earrings, shirts, stickers, and more, made and gathered with love. New shop opening soon.",
   openGraph: {
     title: `${BRAND.name} — A Handmade Boutique`,
     description:
-      "A little handmade boutique — hats, earrings, shirts, stickers, and more, made with love.",
+      "A handmade boutique — hats, earrings, shirts, stickers, and more, made with love.",
     type: "website",
   },
 };

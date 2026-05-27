@@ -19,6 +19,7 @@ export default async function AdminDashboard() {
   let categories = "—";
   let subscribers = "—";
   let messages = "—";
+  let orders = "—";
   let net = "—";
 
   if (db) {
@@ -33,6 +34,12 @@ export default async function AdminDashboard() {
       categories = String(c);
       subscribers = String(s);
       messages = String(m);
+
+      const { count: paidOrders } = await db
+        .from("orders")
+        .select("*", { count: "exact", head: true })
+        .eq("status", "paid");
+      orders = String(paidOrders ?? 0);
 
       const { data: tx } = await db
         .from("finance_transactions")
@@ -64,6 +71,7 @@ export default async function AdminDashboard() {
       </div>
 
       <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
+        <StatCard label="Paid orders" value={orders} hint="Completed checkouts" />
         <StatCard label="Net (all time)" value={net} hint="Income minus expenses" />
       </div>
 

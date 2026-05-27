@@ -68,10 +68,16 @@ a finance engine. **Foundation is built; module CRUD is the next step.**
   `app/admin/(panel)/layout.tsx` is the dashboard shell (sidebar nav). Login
   lives at `app/admin/login/` (outside the panel group, no shell). Route groups
   don't change URLs.
-- **Modules (nav):** Dashboard, Products, Categories, Finances, Subscribers,
-  Messages. Right now each is a **gated stub**: shows live data when the DB is
-  connected (`isDatabaseConfigured()`), else a `ConnectNotice`. Dashboard already
-  runs live count/net queries when connected.
+- **Modules (nav):** Dashboard, Orders, Products, Categories, Finances,
+  Subscribers, Broadcasts, Messages. Each is gated on `isDatabaseConfigured()`
+  (live data when connected, else a `ConnectNotice`). Dashboard runs live
+  count/net queries (incl. a paid-orders count) when connected.
+- **Orders** (`/admin/orders`) — read-only list of checkout orders with status
+  badge (paid/pending/failed), customer + shipping, line items, subtotal/
+  shipping/tax/total, and a Square receipt link. Stat cards: paid count, paid
+  revenue, all-orders count. Fed by the `orders` + `order_items` tables via a
+  nested PostgREST select. Orders are created by `/api/checkout` and flipped to
+  `paid` by the Square webhook.
 - Server uses **`getSupabaseAdmin()`** (service role, bypasses RLS) for admin
   reads/writes — never exposed to client. Public still uses `getSupabase()` (anon).
 - `.env.local` (gitignored) currently has TEST admin creds (`momtest123`) and no
@@ -185,6 +191,64 @@ routes/broadcasts code is transport-agnostic.
   Vercel. Verified the flow locally without a key (opt-in/confirm/unsubscribe +
   admin views all work; actual delivery untested until the key exists).
 
+## Checkout / payments (Square)
+
+**Square hosted checkout (Payment Links).** Customers enter contact + shipping
+on our `/checkout` page, then are redirected to a Square-hosted payment page
+(card / Apple Pay / Google Pay / Cash App Pay). Targets **production** by
+default. (History: briefly built as an embedded Web Payments card form, then
+switched to hosted for lower PCI burden + built-in wallets.)
+
+- **Flow:** cart drawer "Checkout" → `/checkout`
+  (`components/checkout/checkout-client.tsx`) collects contact + shipping and
+  POSTs `{ items, customer }` to `app/api/checkout/route.ts`. The route returns
+  a Square payment-link `url`; the client redirects the browser to it. After
+  paying, Square redirects to `/checkout/success` (which clears the cart via
+  `ClearCartOnMount`). **Payment is confirmed by webhook, not the redirect.**
+- **Server (the source of truth):** the route **re-prices every line from the
+  DB** (`getSupabaseAdmin`, active products only) and ignores client prices —
+  line = `product.price + (giftNote ? $2 : 0)`. It inserts a `pending` order +
+  `order_items`, then creates a Square payment link via
+  `client.checkout.paymentLinks.create` with an `order` whose line items are the
+  products **plus fixed-amount "Shipping" and "Sales tax" lines** (so the Square
+  total exactly equals our computed total — no percentage-tax rounding drift).
+  Stores Square's `order_id` + `payment_link_id` on our row for webhook matching.
+- **Webhook (`app/api/square/webhook/route.ts`):** Square calls it on
+  `payment.updated`. It verifies the signature (`WebhooksHelper.verifySignature`
+  with `SQUARE_WEBHOOK_SIGNATURE_KEY` + `{APP_URL}/api/square/webhook`), then on
+  a COMPLETED payment flips the matching order `pending → paid` (storing payment
+  id + receipt) and logs a `finance_transactions` income row. The update is
+  **idempotent** (`.eq("status","pending")`) so duplicate deliveries can't
+  double-record. Invalid signatures → 401.
+- **Shipping + tax (computed in-code):** `lib/pricing.ts` is the single source
+  of truth — flat **$6** shipping, **free over $75** (`SHIPPING_FLAT` /
+  `FREE_SHIPPING_THRESHOLD`), and **6% SC sales tax applied only to SC-bound
+  orders** (`TAX_RATE` / `TAX_STATE`; shipping is in the tax base). 6% is the SC
+  state base — bump `TAX_RATE` to the county's combined rate if it adds a local
+  option tax. `computeOrderTotals(subtotal, state)` is used by BOTH the checkout
+  page (live preview as the customer types their state) and the server
+  (authoritative recompute before charging). No destination-based multi-state
+  tax — single home-state (SC) nexus model.
+- **Schema:** `0003_orders.sql` — `orders` + `order_items`, RLS on with **no
+  policies** (service-role only); `0004_order_shipping_tax.sql` adds `shipping` +
+  `tax`; `0005_order_square_ids.sql` adds `square_order_id` + `payment_link_id`.
+  Apply each with `node scripts/db-migrate.mjs <file>.sql`.
+- **`lib/square.ts`** — `getSquareClient()` (server-only, returns null until env
+  set), `getSquareLocationId()`, `getAppUrl()`, `getSquareWebhookSignatureKey()`,
+  `isSquareConfigured()`. Uses the `square` npm SDK (v44). `GIFT_NOTE_PRICE` lives
+  in `lib/pricing.ts` (shared by client add-to-cart + server re-pricing).
+- **Env (add to `.env.local` + Vercel; see `.env.example`):**
+  `SQUARE_ACCESS_TOKEN` (server secret), `SQUARE_ENVIRONMENT`
+  (production|sandbox), `NEXT_PUBLIC_SQUARE_LOCATION_ID`,
+  `SQUARE_WEBHOOK_SIGNATURE_KEY`, and `APP_URL` (absolute site URL — used for the
+  post-payment redirect + webhook verification). Without Square env the API
+  returns 503 and `/checkout` shows a "being set up" notice.
+- **Square Dashboard setup:** add a webhook subscription for `payment.updated`
+  pointing at `{APP_URL}/api/square/webhook`; copy its signature key into
+  `SQUARE_WEBHOOK_SIGNATURE_KEY`. **Untested live** (needs real credentials +
+  products). Verified locally: 503 when unconfigured, payment-link path builds,
+  webhook rejects bad signatures (401) and is idempotent.
+
 ## Copy rules + gift note
 
 - **Copy must NOT imply low quantity / limited capacity** (no "small batches",
@@ -251,7 +315,10 @@ public/images/                      empty
    `materials`→`categories` (+ `products.material`→`category`, drop `style`) to
    fit the general-boutique model, then point `lib/data.ts` accessors at the DB
    (RLS already allows public reads). No momshop Supabase MCP exists yet.
-4. **Checkout** — not wired; cart "Checkout" shows a "coming soon" note.
+4. **Checkout** — WIRED to Square (hosted checkout / payment links) with in-code
+   shipping + tax + a confirming webhook. See the "Checkout / payments (Square)"
+   section. Remaining: real Square credentials + webhook subscription on Vercel,
+   then a live smoke-test order.
 5. When real products land, revisit `/products/[slug]` (breadcrumb still uses
    the old material grouping) and the home/shop grids (swap ComingSoonCard for
    ProductCard).
