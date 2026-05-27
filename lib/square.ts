@@ -25,12 +25,22 @@ export function getSquareClient(): SquareClient | null {
   return cached;
 }
 
-/** The Square location to attribute payments to (also used by the web SDK). */
+/** The Square location to attribute orders/payments to. */
 export function getSquareLocationId(): string {
   return process.env.NEXT_PUBLIC_SQUARE_LOCATION_ID ?? "";
 }
 
-/** True when server-side card charges can be created. */
+/** Absolute site URL (no trailing slash) for redirect + webhook URLs. */
+export function getAppUrl(): string {
+  return (process.env.APP_URL ?? "").replace(/\/$/, "");
+}
+
+/** Signature key for verifying incoming Square webhooks. */
+export function getSquareWebhookSignatureKey(): string {
+  return process.env.SQUARE_WEBHOOK_SIGNATURE_KEY ?? "";
+}
+
+/** True when Square checkout (payment links) can be created. */
 export function isSquareConfigured(): boolean {
   return Boolean(process.env.SQUARE_ACCESS_TOKEN && getSquareLocationId());
 }

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Container } from "@/components/ui/container";
 import { Button } from "@/components/ui/button";
 import { HeartIcon, SprigIcon } from "@/components/icons";
+import { ClearCartOnMount } from "@/components/checkout/clear-cart-on-mount";
 
 export const metadata: Metadata = {
   title: "Order confirmed",
@@ -12,6 +13,7 @@ export const metadata: Metadata = {
 export default function CheckoutSuccessPage() {
   return (
     <section className="py-20 lg:py-28">
+      <ClearCartOnMount />
       <Container size="narrow" className="text-center">
         <SprigIcon className="mx-auto mb-5 h-8 w-8 text-sage" />
         <span className="eyebrow">Thank you</span>

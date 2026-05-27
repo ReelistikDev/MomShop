@@ -1,8 +1,16 @@
 import { randomUUID } from "node:crypto";
 import { NextResponse } from "next/server";
 import { getSupabaseAdmin, isDatabaseConfigured } from "@/lib/supabase";
-import { getSquareClient, getSquareLocationId, isSquareConfigured } from "@/lib/square";
-import { GIFT_NOTE_PRICE, computeOrderTotals } from "@/lib/pricing";
+import {
+  getAppUrl,
+  getSquareClient,
+  getSquareLocationId,
+  isSquareConfigured,
+} from "@/lib/square";
+import { GIFT_NOTE_PRICE, TAX_STATE, computeOrderTotals } from "@/lib/pricing";
+import { BRAND } from "@/lib/brand";
+
+const cents = (usd: number) => BigInt(Math.round(usd * 100));
 
 const EMAIL = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
 
@@ -36,17 +44,12 @@ export async function POST(req: Request) {
   }
 
   const body = await req.json().catch(() => ({}));
-  const sourceId = str(body.sourceId);
-  const idempotencyKey = str(body.idempotencyKey) || randomUUID();
   const items: IncomingItem[] = Array.isArray(body.items) ? body.items : [];
   const customer: IncomingCustomer = body.customer ?? {};
 
   const name = str(customer.name);
   const email = str(customer.email);
 
-  if (!sourceId) {
-    return NextResponse.json({ error: "Missing payment details." }, { status: 400 });
-  }
   if (!name || !EMAIL.test(email)) {
     return NextResponse.json(
       { error: "Please provide your name and a valid email." },
@@ -126,9 +129,8 @@ export async function POST(req: Request) {
     rawSubtotal,
     str(customer.state)
   );
-  const amountCents = Math.round(total * 100);
 
-  if (amountCents <= 0) {
+  if (total <= 0) {
     return NextResponse.json({ error: "Order total must be greater than zero." }, { status: 400 });
   }
 
@@ -180,68 +182,67 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Could not start your order." }, { status: 500 });
   }
 
-  // Charge the card with Square.
+  // Build a Square hosted-checkout order. Shipping + tax are added as their own
+  // line items (fixed amounts) so the Square total exactly equals what we
+  // computed and stored — no percentage-tax rounding drift.
+  const lineItems = lines.map((l) => ({
+    name: l.engraving ? `${l.name} (“${l.engraving}”)` : l.name,
+    quantity: String(l.quantity),
+    basePriceMoney: { amount: cents(l.unitPrice), currency: "USD" as const },
+  }));
+  if (shipping > 0) {
+    lineItems.push({
+      name: "Shipping",
+      quantity: "1",
+      basePriceMoney: { amount: cents(shipping), currency: "USD" },
+    });
+  }
+  if (tax > 0) {
+    lineItems.push({
+      name: `Sales tax (${TAX_STATE})`,
+      quantity: "1",
+      basePriceMoney: { amount: cents(tax), currency: "USD" },
+    });
+  }
+
+  const appUrl = getAppUrl();
   const square = getSquareClient()!;
   try {
-    const result = await square.payments.create({
-      sourceId,
-      idempotencyKey,
-      amountMoney: { amount: BigInt(amountCents), currency: "USD" },
-      locationId: getSquareLocationId(),
-      buyerEmailAddress: email,
-      referenceId: orderId,
-      note: `MomShop order ${orderId}`,
-      ...(str(customer.line1)
-        ? {
-            shippingAddress: {
-              addressLine1: str(customer.line1),
-              addressLine2: str(customer.line2) || undefined,
-              locality: str(customer.city) || undefined,
-              administrativeDistrictLevel1: str(customer.state) || undefined,
-              postalCode: str(customer.postal) || undefined,
-              country: "US" as const,
-            },
-          }
-        : {}),
+    const result = await square.checkout.paymentLinks.create({
+      idempotencyKey: randomUUID(),
+      order: {
+        locationId: getSquareLocationId(),
+        referenceId: orderId,
+        lineItems,
+      },
+      checkoutOptions: {
+        askForShippingAddress: false,
+        merchantSupportEmail: BRAND.email,
+        acceptedPaymentMethods: { applePay: true, googlePay: true, cashAppPay: true },
+        ...(appUrl ? { redirectUrl: `${appUrl}/checkout/success` } : {}),
+      },
+      prePopulatedData: { buyerEmail: email },
     });
 
-    const payment = result.payment;
-    if (!payment || payment.status === "FAILED") {
+    const link = result.paymentLink;
+    if (!link?.url) {
       await supabase.from("orders").update({ status: "failed" }).eq("id", orderId);
-      return NextResponse.json({ error: "Payment was declined." }, { status: 402 });
+      return NextResponse.json({ error: "Could not start checkout." }, { status: 502 });
     }
 
     await supabase
       .from("orders")
-      .update({
-        status: "paid",
-        square_payment_id: payment.id ?? null,
-        square_receipt_url: payment.receiptUrl ?? null,
-      })
+      .update({ square_order_id: link.orderId ?? null, payment_link_id: link.id ?? null })
       .eq("id", orderId);
 
-    // Record the sale as income for the finance dashboard (best-effort).
-    await supabase
-      .from("finance_transactions")
-      .insert({
-        type: "income",
-        amount: total,
-        category: "Sales",
-        description: `Online order ${orderId}`,
-        payment_method: "Square",
-      })
-      .then(({ error }) => {
-        if (error) console.error("[checkout] finance log failed:", error.message);
-      });
-
-    return NextResponse.json({ orderId, receiptUrl: payment.receiptUrl ?? null });
+    return NextResponse.json({ url: link.url });
   } catch (err) {
     await supabase.from("orders").update({ status: "failed" }).eq("id", orderId);
     const detail = squareErrorMessage(err);
-    console.error("[checkout] payment failed:", detail);
+    console.error("[checkout] payment link failed:", detail);
     return NextResponse.json(
-      { error: detail ?? "We couldn't process your payment. Please try again." },
-      { status: 402 }
+      { error: detail ?? "We couldn't start checkout. Please try again." },
+      { status: 502 }
     );
   }
 }
