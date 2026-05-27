@@ -27,6 +27,7 @@ type ProductRow = {
   sku: string | null;
   featured: boolean | null;
   sold_out: boolean | null;
+  stock: number | null;
   active: boolean;
   sort_order: number | null;
   created_at: string;
@@ -42,6 +43,7 @@ type CategoryRow = {
 };
 
 function mapProduct(row: ProductRow): Product {
+  const stock = row.stock ?? null;
   return {
     id: row.id,
     slug: row.slug,
@@ -52,7 +54,9 @@ function mapProduct(row: ProductRow): Product {
     description: row.description ?? "",
     badge: row.badge ?? undefined,
     category: row.category ?? undefined,
-    soldOut: row.sold_out ?? undefined,
+    // Sold out if manually flagged OR a tracked stock count has run out.
+    soldOut: Boolean(row.sold_out) || (stock !== null && stock <= 0),
+    stock,
     featured: row.featured ?? undefined,
     variants: Array.isArray(row.variants) ? (row.variants as ProductVariant[]) : [],
   };

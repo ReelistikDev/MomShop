@@ -77,6 +77,20 @@ export async function POST(req: Request) {
       .then(({ error: finErr }) => {
         if (finErr) console.error("[square webhook] finance log failed:", finErr.message);
       });
+
+    // Decrement tracked inventory for each line (no-op for untracked products).
+    const { data: orderItems } = await supabase
+      .from("order_items")
+      .select("product_id, quantity")
+      .eq("order_id", updated.id);
+    for (const item of orderItems ?? []) {
+      if (!item.product_id) continue;
+      const { error: decErr } = await supabase.rpc("decrement_product_stock", {
+        p_id: item.product_id,
+        p_qty: item.quantity,
+      });
+      if (decErr) console.error("[square webhook] stock decrement failed:", decErr.message);
+    }
   }
 
   return NextResponse.json({ ok: true });

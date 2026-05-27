@@ -83,7 +83,7 @@ export async function POST(req: Request) {
   const ids = [...new Set(requested.map((l) => l.productId))];
   const { data: rows, error: lookupError } = await supabase
     .from("products")
-    .select("id, name, price, active, sold_out")
+    .select("id, name, price, active, sold_out, stock")
     .in("id", ids)
     .eq("active", true);
 
@@ -109,6 +109,18 @@ export async function POST(req: Request) {
     if (!product || product.sold_out) {
       return NextResponse.json(
         { error: "One or more items are no longer available." },
+        { status: 409 }
+      );
+    }
+    // Re-check tracked stock so the last unit can't be oversold.
+    if (product.stock != null && line.quantity > product.stock) {
+      return NextResponse.json(
+        {
+          error:
+            product.stock <= 0
+              ? `Sorry, "${product.name}" just sold out.`
+              : `Sorry, only ${product.stock} of "${product.name}" left.`,
+        },
         { status: 409 }
       );
     }

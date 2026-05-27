@@ -23,7 +23,7 @@ export default function AboutPage() {
           <p className="mt-6 text-lg leading-relaxed text-stone">
             {BRAND.name} started as a creative passion that grew into
             something to share — a place for handmade and hand-picked pieces
-            made with care, not in a factory.
+            made with care.
           </p>
           <p className="mt-4 leading-relaxed text-stone">
             The shop is open, full of hats, earrings, shirts, stickers, and

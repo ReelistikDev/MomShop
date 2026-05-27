@@ -21,6 +21,8 @@ export interface Product {
   /** Category slug (→ categories.slug). */
   category?: string;
   soldOut?: boolean;
+  /** Units available; null/undefined = not tracked (unlimited). */
+  stock?: number | null;
   featured?: boolean;
   variants?: ProductVariant[];
   /** Whether the piece supports a short personalization / engraving. */
