@@ -21,7 +21,7 @@ export default function CheckoutSuccessPage() {
         </h1>
         <p className="mx-auto mt-6 max-w-md text-lg leading-relaxed text-stone">
           We&apos;ve received your order and sent a receipt to your email. We&apos;ll
-          be in touch shortly to confirm shipping details.
+          be in touch shortly with tracking details.
         </p>
         <p className="mt-6 flex items-center justify-center gap-2 font-script text-2xl text-ink">
           Made with love

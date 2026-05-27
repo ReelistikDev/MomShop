@@ -7,6 +7,7 @@ import { useCart } from "@/components/cart/cart-provider";
 import { ActionButton } from "@/components/ui/button";
 import { ArrowRightIcon } from "@/components/icons";
 import { formatPrice } from "@/lib/utils";
+import { computeOrderTotals, TAX_STATE } from "@/lib/pricing";
 
 interface SquareTokenizeResult {
   status: string;
@@ -67,8 +68,10 @@ export function CheckoutClient() {
   const [cardReady, setCardReady] = useState(false);
   const [status, setStatus] = useState<"idle" | "paying">("idle");
   const [error, setError] = useState<string | null>(null);
+  const [shipState, setShipState] = useState("");
 
   const configured = Boolean(APP_ID && LOCATION_ID);
+  const totals = computeOrderTotals(subtotal, shipState);
 
   useEffect(() => {
     if (!configured || items.length === 0) return;
@@ -204,7 +207,14 @@ export function CheckoutClient() {
           <input name="line2" placeholder="Apt, suite, etc. (optional)" className={fieldClass} />
           <div className="grid gap-4 sm:grid-cols-3">
             <input name="city" required placeholder="City" className={fieldClass} />
-            <input name="state" required placeholder="State" className={fieldClass} />
+            <input
+              name="state"
+              required
+              placeholder="State"
+              value={shipState}
+              onChange={(e) => setShipState(e.target.value)}
+              className={fieldClass}
+            />
             <input name="postal" required placeholder="ZIP" className={fieldClass} />
           </div>
         </fieldset>
@@ -239,12 +249,28 @@ export function CheckoutClient() {
             </li>
           ))}
         </ul>
+        <dl className="flex flex-col gap-2 border-t border-line pt-4 text-[0.95rem]">
+          <div className="flex justify-between">
+            <dt className="text-stone">Subtotal</dt>
+            <dd className="tabular-nums text-ink">{formatPrice(totals.subtotal)}</dd>
+          </div>
+          <div className="flex justify-between">
+            <dt className="text-stone">Shipping</dt>
+            <dd className="tabular-nums text-ink">
+              {totals.shipping === 0 ? "Free" : formatPrice(totals.shipping)}
+            </dd>
+          </div>
+          <div className="flex justify-between">
+            <dt className="text-stone">Tax</dt>
+            <dd className="tabular-nums text-ink">{formatPrice(totals.tax)}</dd>
+          </div>
+        </dl>
         <div className="flex items-center justify-between border-t border-line pt-4 text-ink">
-          <span className="text-stone">Subtotal</span>
-          <span className="font-serif text-xl tabular-nums">{formatPrice(subtotal)}</span>
+          <span className="text-stone">Total</span>
+          <span className="font-serif text-xl tabular-nums">{formatPrice(totals.total)}</span>
         </div>
         <p className="text-[0.8rem] text-mist">
-          Shipping is arranged after your order — we&apos;ll confirm by email.
+          Sales tax applies to {TAX_STATE} orders. Enter your state to see your total.
         </p>
         <ActionButton
           type="submit"
@@ -253,7 +279,7 @@ export function CheckoutClient() {
           className="w-full"
           disabled={!cardReady || status === "paying"}
         >
-          {status === "paying" ? "Processing…" : `Pay ${formatPrice(subtotal)}`}
+          {status === "paying" ? "Processing…" : `Pay ${formatPrice(totals.total)}`}
         </ActionButton>
         {error && <p className="text-sm text-oak-dark">{error}</p>}
       </aside>

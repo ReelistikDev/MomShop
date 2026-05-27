@@ -2,7 +2,7 @@ import { randomUUID } from "node:crypto";
 import { NextResponse } from "next/server";
 import { getSupabaseAdmin, isDatabaseConfigured } from "@/lib/supabase";
 import { getSquareClient, getSquareLocationId, isSquareConfigured } from "@/lib/square";
-import { GIFT_NOTE_PRICE } from "@/lib/pricing";
+import { GIFT_NOTE_PRICE, computeOrderTotals } from "@/lib/pricing";
 
 const EMAIL = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
 
@@ -121,8 +121,11 @@ export async function POST(req: Request) {
     });
   }
 
-  const subtotal = lines.reduce((sum, l) => sum + l.unitPrice * l.quantity, 0);
-  const total = subtotal; // shipping/tax handled offline for now
+  const rawSubtotal = lines.reduce((sum, l) => sum + l.unitPrice * l.quantity, 0);
+  const { subtotal, shipping, tax, total } = computeOrderTotals(
+    rawSubtotal,
+    str(customer.state)
+  );
   const amountCents = Math.round(total * 100);
 
   if (amountCents <= 0) {
@@ -143,6 +146,8 @@ export async function POST(req: Request) {
       ship_postal: str(customer.postal) || null,
       ship_country: "US",
       subtotal,
+      shipping,
+      tax,
       total,
       currency: "USD",
     })

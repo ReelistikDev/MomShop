@@ -203,9 +203,19 @@ customers never leave the site). Targets **production** by default.
   BigInt**, USD), then flips the order to `paid` (storing `square_payment_id` +
   receipt URL) and logs a `finance_transactions` income row (category "Sales",
   method "Square"). Declines/errors mark the order `failed` and return 402.
+- **Shipping + tax (computed in-code):** `lib/pricing.ts` is the single source
+  of truth — flat **$6** shipping, **free over $75** (`SHIPPING_FLAT` /
+  `FREE_SHIPPING_THRESHOLD`), and **7.25% NC sales tax applied only to NC-bound
+  orders** (`TAX_RATE` / `TAX_STATE`; NC taxes shipping, so the base includes
+  it). `computeOrderTotals(subtotal, state)` is used by BOTH the checkout page
+  (live preview as the customer types their state) and the server (authoritative
+  recompute before charging). Edit the constants to change rates. No
+  destination-based multi-state tax — single home-state nexus model.
 - **Schema:** migration `0003_orders.sql` — `orders` + `order_items`, RLS on
-  with **no policies** (service-role only, no anon access). Apply with
-  `node scripts/db-migrate.mjs 0003_orders.sql`.
+  with **no policies** (service-role only, no anon access);
+  `0004_order_shipping_tax.sql` adds `shipping` + `tax` columns to `orders`.
+  Apply with `node scripts/db-migrate.mjs 0003_orders.sql` then
+  `node scripts/db-migrate.mjs 0004_order_shipping_tax.sql`.
 - **`lib/square.ts`** — `getSquareClient()` (server-only, returns null until
   env set), `getSquareLocationId()`, `isSquareConfigured()`. Uses the `square`
   npm SDK (v44). `GIFT_NOTE_PRICE` now lives in `lib/pricing.ts` (shared by the
@@ -215,11 +225,10 @@ customers never leave the site). Targets **production** by default.
   (production|sandbox), `NEXT_PUBLIC_SQUARE_APP_ID`,
   `NEXT_PUBLIC_SQUARE_LOCATION_ID`, `NEXT_PUBLIC_SQUARE_ENVIRONMENT`. Without
   these the API returns 503 and `/checkout` shows a "being set up" notice.
-- **Not yet:** shipping/tax calculation (arranged offline, confirmed by email),
-  Square webhooks for async events (refunds/disputes) — synchronous charge
-  response is currently the source of truth. **Untested live** (needs real
-  credentials + products; the Square web CDN is blocked from the dev sandbox,
-  which only affects local testing, not real browsers).
+- **Not yet:** Square webhooks for async events (refunds/disputes) —
+  synchronous charge response is currently the source of truth. **Untested
+  live** (needs real credentials + products; the Square web CDN is blocked from
+  the dev sandbox, which only affects local testing, not real browsers).
 
 ## Copy rules + gift note
 
@@ -287,9 +296,9 @@ public/images/                      empty
    `materials`→`categories` (+ `products.material`→`category`, drop `style`) to
    fit the general-boutique model, then point `lib/data.ts` accessors at the DB
    (RLS already allows public reads). No momshop Supabase MCP exists yet.
-4. **Checkout** — WIRED to Square (embedded Web Payments SDK). See the
-   "Checkout / payments (Square)" section. Remaining: real Square credentials
-   on Vercel + a live smoke-test order; shipping/tax are arranged offline.
+4. **Checkout** — WIRED to Square (embedded Web Payments SDK) with in-code
+   shipping + tax. See the "Checkout / payments (Square)" section. Remaining:
+   real Square credentials on Vercel + a live smoke-test order.
 5. When real products land, revisit `/products/[slug]` (breadcrumb still uses
    the old material grouping) and the home/shop grids (swap ComingSoonCard for
    ProductCard).
