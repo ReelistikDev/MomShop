@@ -205,12 +205,13 @@ customers never leave the site). Targets **production** by default.
   method "Square"). Declines/errors mark the order `failed` and return 402.
 - **Shipping + tax (computed in-code):** `lib/pricing.ts` is the single source
   of truth — flat **$6** shipping, **free over $75** (`SHIPPING_FLAT` /
-  `FREE_SHIPPING_THRESHOLD`), and **7.25% NC sales tax applied only to NC-bound
-  orders** (`TAX_RATE` / `TAX_STATE`; NC taxes shipping, so the base includes
-  it). `computeOrderTotals(subtotal, state)` is used by BOTH the checkout page
-  (live preview as the customer types their state) and the server (authoritative
-  recompute before charging). Edit the constants to change rates. No
-  destination-based multi-state tax — single home-state nexus model.
+  `FREE_SHIPPING_THRESHOLD`), and **6% SC sales tax applied only to SC-bound
+  orders** (`TAX_RATE` / `TAX_STATE`; shipping is in the tax base). 6% is the SC
+  state base — bump `TAX_RATE` to the county's combined rate if it adds a local
+  option tax. `computeOrderTotals(subtotal, state)` is used by BOTH the checkout
+  page (live preview as the customer types their state) and the server
+  (authoritative recompute before charging). No destination-based multi-state
+  tax — single home-state (SC) nexus model.
 - **Schema:** migration `0003_orders.sql` — `orders` + `order_items`, RLS on
   with **no policies** (service-role only, no anon access);
   `0004_order_shipping_tax.sql` adds `shipping` + `tax` columns to `orders`.

@@ -16,10 +16,13 @@ export const SHIPPING_FLAT = 6;
 export const FREE_SHIPPING_THRESHOLD = 75;
 
 /** Sales tax is collected only for orders shipping to this state. */
-export const TAX_STATE = "NC";
-export const TAX_STATE_NAME = "North Carolina";
-/** Combined state + local rate applied to taxable orders (Asheville, NC ≈ 7.25%). */
-export const TAX_RATE = 0.0725;
+export const TAX_STATE = "SC";
+export const TAX_STATE_NAME = "South Carolina";
+/**
+ * SC statewide sales tax is 6%. Many counties add a local option tax (≈1–2%) —
+ * set this to your county's combined rate if it's higher than the state base.
+ */
+export const TAX_RATE = 0.06;
 
 export interface OrderTotals {
   subtotal: number;
@@ -41,7 +44,7 @@ export function isTaxableState(state: string): boolean {
   return s === TAX_STATE || s === TAX_STATE_NAME.toUpperCase();
 }
 
-/** NC taxes shipping on taxable goods, so the tax base includes shipping. */
+/** Shipping is included in the tax base (taxable in SC as part of a taxable sale). */
 export function computeOrderTotals(subtotal: number, state: string): OrderTotals {
   const sub = round2(Math.max(0, subtotal));
   const shipping = computeShipping(sub);
