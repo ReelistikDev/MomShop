@@ -48,11 +48,11 @@ export default async function HomePage() {
           </h1>
           <p className="mt-6 max-w-xl text-lg leading-relaxed text-stone">
             Hats, earrings, shirts, stickers, and more — handmade and chosen
-            with care. The shop is being stocked right now.
+            with care. The shop is now open.
           </p>
           <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
-            <Button href="/#newsletter" variant="primary" size="lg">
-              Get notified
+            <Button href="/shop" variant="primary" size="lg">
+              Shop now
               <ArrowRightIcon className="h-4 w-4" />
             </Button>
             <Button href="/custom" variant="outline" size="lg">
@@ -61,7 +61,7 @@ export default async function HomePage() {
           </div>
           <p className="mt-12 flex items-center gap-2.5 font-script text-2xl text-ink">
             <SprigIcon className="h-5 w-5 text-sage" />
-            Opening soon
+            Now Open!
             <HeartIcon className="h-4 w-4 text-heart" />
           </p>
         </Container>
@@ -93,8 +93,8 @@ export default async function HomePage() {
             <>
               <SectionHeading
                 eyebrow="The shop"
-                title="New things, coming soon"
-                intro="We're stocking the shelves — hats, earrings, shirts, stickers, and more on the way."
+                title="New in the shop"
+                intro="Hats, earrings, shirts, stickers, and more — handmade and chosen with care."
                 align="center"
                 className="mx-auto"
               />
@@ -191,12 +191,12 @@ export default async function HomePage() {
       {/* ----------------------------- Newsletter ----------------------------- */}
       <section id="newsletter" className="scroll-mt-24 py-20 lg:py-28">
         <Container size="narrow" className="text-center">
-          <span className="eyebrow">Be the first to know</span>
+          <span className="eyebrow">Stay in the loop</span>
           <h2 className="text-h2 mt-3 text-balance">
-            We&apos;ll let you know the moment we open
+            New pieces, straight to your inbox
           </h2>
           <p className="mx-auto mt-4 max-w-md leading-relaxed text-stone">
-            Join the list for first looks at new pieces and the shop opening —
+            Join the list for first looks at new pieces and restocks —
             no noise, just a gentle hello when there&apos;s something to share.
           </p>
           <NewsletterForm className="mx-auto mt-8 max-w-md" />

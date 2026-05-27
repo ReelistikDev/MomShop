@@ -26,7 +26,7 @@ export default function AboutPage() {
             made with care, not in a factory.
           </p>
           <p className="mt-4 leading-relaxed text-stone">
-            The shop is filling up with hats, earrings, shirts, stickers, and
+            The shop is open, full of hats, earrings, shirts, stickers, and
             more, all made or chosen by hand. {BRAND.location}.
           </p>
         </Container>
