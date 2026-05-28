@@ -13,7 +13,7 @@ export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "Shop",
-  description: `Shop handmade hats, earrings, shirts, stickers, and more — now open at ${BRAND.name}.`,
+  description: `The ${BRAND.name} shop is being stocked — hats, earrings, shirts, stickers, and more, coming soon.`,
 };
 
 function HeaderBand() {
@@ -21,7 +21,7 @@ function HeaderBand() {
     <section className="border-b border-line bg-linen/60">
       <Container className="py-16 text-center lg:py-24">
         <span className="eyebrow">The shop</span>
-        <h1 className="text-h1 mt-3 text-balance">The shop is now open</h1>
+        <h1 className="text-h1 mt-3 text-balance">Our shelves are filling up</h1>
         <p className="mx-auto mt-4 max-w-xl leading-relaxed text-stone">
           Hats, earrings, shirts, stickers, and more — all handmade and
           gathered with care.
@@ -57,7 +57,7 @@ export default async function ShopPage({
   const totalProducts =
     activeCategory === "all" ? products.length : (await getProducts()).length;
 
-  // Empty catalog → show placeholder cards.
+  // Empty catalog → keep the original "Coming soon" layout.
   if (totalProducts === 0) {
     return (
       <>
@@ -69,7 +69,7 @@ export default async function ShopPage({
             ))}
           </div>
           <p className="mt-12 flex items-center justify-center gap-2 font-script text-2xl text-stone">
-            Now open
+            Worth the wait
             <HeartIcon className="h-4 w-4 text-heart" />
           </p>
         </Container>

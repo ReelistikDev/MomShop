@@ -12,10 +12,10 @@ export function ComingSoonCard({ className }: { className?: string }) {
     >
       <SprigIcon className="h-7 w-7 text-sage/70" />
       <span className="font-script text-2xl leading-none text-stone">
-        New piece
+        Coming soon
       </span>
       <span className="text-[0.68rem] font-semibold uppercase tracking-[0.18em] text-mist">
-        Fresh in the shop
+        New piece on the way
       </span>
     </div>
   );
@@ -28,7 +28,7 @@ export function ComingSoonCard({ className }: { className?: string }) {
  */
 export function PlaceholderPanel({
   className,
-  label = "Photo on the way",
+  label = "Photography coming soon",
   tone = "light",
 }: {
   className?: string;

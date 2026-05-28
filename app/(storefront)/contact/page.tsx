@@ -15,8 +15,8 @@ export const metadata: Metadata = {
 
 const FAQS = [
   {
-    q: "Is the shop open?",
-    a: "Yes — we're open! Browse the shop and order anytime. Join the list to hear about new pieces and restocks.",
+    q: "When does the shop open?",
+    a: "We're stocking the shelves now. Join the list and we'll let you know the moment new pieces go live.",
   },
   {
     q: "How long does an order take?",
