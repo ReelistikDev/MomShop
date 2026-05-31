@@ -1,5 +1,6 @@
 import { Container } from "@/components/ui/container";
 import { Button } from "@/components/ui/button";
+import { Logo } from "@/components/ui/logo";
 import { SectionHeading } from "@/components/ui/section-heading";
 import { ComingSoonCard } from "@/components/placeholders";
 import { ProductCard } from "@/components/product-card";
@@ -41,6 +42,11 @@ export default async function HomePage() {
       {/* ----------------------------- Hero ----------------------------- */}
       <section className="relative overflow-hidden">
         <Container className="flex flex-col items-center py-20 text-center lg:py-28">
+          <Logo
+            priority
+            sizes="(min-width: 1024px) 352px, 280px"
+            className="mb-6 w-64 animate-rise sm:w-72 lg:w-[22rem]"
+          />
           <span className="eyebrow animate-rise">A handmade boutique</span>
           <h1 className="text-display mt-5 max-w-3xl text-balance">
             Handmade things,{" "}

@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { BRAND } from "@/lib/brand";
 import { Container } from "@/components/ui/container";
+import { Logo } from "@/components/ui/logo";
 import {
   FacebookIcon,
   HeartIcon,
@@ -43,11 +44,11 @@ export function SiteFooter() {
         <div className="grid gap-12 lg:grid-cols-[1.4fr_1fr_1fr_1fr]">
           {/* Brand */}
           <div className="max-w-xs">
-            <div className="flex items-center gap-2">
-              <span className="h-1.5 w-1.5 rounded-full bg-sage" />
-              <span className="font-serif text-2xl">{BRAND.name}</span>
+            <div className="flex items-center gap-2.5">
+              <Logo variant="mark" sizes="64px" className="h-14 w-14 lg:h-16 lg:w-16" />
+              <span className="font-serif text-2xl text-ink">{BRAND.name}</span>
             </div>
-            <p className="mt-4 text-[0.95rem] leading-relaxed text-stone">
+            <p className="mt-5 text-[0.95rem] leading-relaxed text-stone">
               {BRAND.description} Each piece is made or chosen by hand, with
               care.
             </p>

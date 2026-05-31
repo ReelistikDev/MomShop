@@ -35,6 +35,9 @@ export const metadata: Metadata = {
     description:
       "A handmade boutique — hats, earrings, shirts, stickers, and more, made with love.",
     type: "website",
+    images: [
+      { url: "/images/logo.jpg", width: 1800, height: 1800, alt: `${BRAND.name} logo` },
+    ],
   },
 };
 

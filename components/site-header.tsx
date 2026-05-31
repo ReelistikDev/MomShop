@@ -8,6 +8,7 @@ import { cn } from "@/lib/utils";
 import { useCart } from "@/components/cart/cart-provider";
 import { BagIcon, CloseIcon, HeartIcon, MenuIcon } from "@/components/icons";
 import { Container } from "@/components/ui/container";
+import { Logo } from "@/components/ui/logo";
 
 const NAV = [
   { href: "/shop", label: "Shop" },
@@ -69,12 +70,14 @@ export function SiteHeader() {
             {/* Brand */}
             <Link
               href="/"
-              className="flex items-center gap-2 lg:flex-1"
+              className="flex items-center gap-2.5 lg:flex-1"
               aria-label={`${BRAND.name} home`}
             >
-              <span
-                className="h-1.5 w-1.5 rounded-full bg-sage"
-                aria-hidden="true"
+              <Logo
+                variant="mark"
+                priority
+                sizes="56px"
+                className="h-11 w-11 lg:h-14 lg:w-14"
               />
               <span className="font-serif text-xl tracking-tight text-ink lg:text-[1.4rem]">
                 {BRAND.name}
@@ -150,7 +153,10 @@ export function SiteHeader() {
           )}
         >
           <div className="mb-6 flex items-center justify-between">
-            <span className="font-serif text-xl text-ink">{BRAND.name}</span>
+            <span className="flex items-center gap-2.5">
+              <Logo variant="mark" sizes="44px" className="h-11 w-11" />
+              <span className="font-serif text-xl text-ink">{BRAND.name}</span>
+            </span>
             <button
               type="button"
               onClick={() => setMenuOpen(false)}
